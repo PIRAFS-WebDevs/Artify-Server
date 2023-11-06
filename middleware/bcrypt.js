@@ -4,6 +4,7 @@ const saltRounds = 15;
 async function hashPassword(password) {
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    console.log(password);
     return hashedPassword;
   } catch (error) {
     throw error;
