@@ -3,7 +3,7 @@ const { hashPassword,comparePasswords } = require("../../middleware/bcrypt");
 const { createToken } = require("../../middleware/jsonwebtoken");
 
 const userSingup = async (req,res)=>{
-    const {firstName,lastName,email,phoneNumber,countryName,address,password} = req.body;
+    const {firstName,lastName,email,phoneNumber,countryName,address,password} = req.data;
     console.log("hello");
     if(!firstName || !email || !password){
         res.status(401).send(false);
@@ -43,7 +43,7 @@ const userSingup = async (req,res)=>{
 
 const userLogin = async (req,res)=>{
 
-    const {email,password} = req.body;
+    const {email,password} = req.data;
 
     if(email || password){
 
