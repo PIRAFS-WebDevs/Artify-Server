@@ -3,18 +3,18 @@ const { hashPassword,comparePasswords } = require("../../middleware/bcrypt");
 const { createToken } = require("../../middleware/jsonwebtoken");
 
 const userSingup = async (req,res)=>{
-    const {fullName,userName,email,phoneNumber,countryName,address,password} = req.body;
+    const {firstName,lastName,email,phoneNumber,countryName,address,password} = req.body;
     console.log("hello");
-    if(!fullName || !userName || !email || !phoneNumber || !countryName || !address || !password){
+    if(!firstName || !email || !password){
         res.status(401).send(false);
     }else{
         try
         {const encryptPassword = await hashPassword(password);
             console.log(encryptPassword);
-         const smUserName = userName.toLowerCase();
+         const smUserName = firstName.toLowerCase();
         const adduser = await new userloginModel({
-            full_name:fullName,
-            user_name: smUserName,
+            full_name:firstName+" "+lastName,
+            user_name: smUserName+(Math.floor(1000 + Math.random() * 9000)),
             email: email,
             phoneNumber:phoneNumber,
             countryName:countryName,
@@ -43,14 +43,14 @@ const userSingup = async (req,res)=>{
 
 const userLogin = async (req,res)=>{
 
-    const {userName,password} = req.body;
+    const {email,password} = req.body;
 
-    if(userName || password){
+    if(email || password){
 
         try{
             const data = await userloginModel.findOne({$or: [
-                { user_name: userName },
-                { email: userName }
+                { user_name: email },
+                { email: email }
               ]});
 
               //console.log(data.password);
