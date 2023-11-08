@@ -3,8 +3,13 @@ const { userSingup, userLogin } = require("../../Controller/auth Login/authContr
 const { userCheckToken } = require("../../middleware/jsonwebtoken");
 const Router = express.Router();
 
+//User Login Route/API
 Router.post("/signup",userSingup);
 Router.post("/login",userLogin);
+
+
+//Signle Product Route/API:-
+//Router.podt
 
 
 

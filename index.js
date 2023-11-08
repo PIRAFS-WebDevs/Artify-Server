@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser");
 
 
 const userRoute = require("./route/userRoute/userRoute");
+const adminRoute = require("./route/adminRoute/adminRoute");
 
 
 
@@ -17,7 +18,7 @@ const port = process.env.PORT || 8080;
 connectDatabase();
 
 const corsOptions = {
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:5000'],
     credentials: true,
   };
 
@@ -36,6 +37,7 @@ app.use((req, res, next) => {
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/v1/auth",userRoute);
+app.use("/api/v1/auth",adminRoute);
 app.use(morgan("dev"));
 app.use(cookieParser());
 
