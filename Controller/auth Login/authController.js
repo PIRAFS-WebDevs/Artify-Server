@@ -2,8 +2,13 @@ const userloginModel = require("../../Model/userModel");
 const { hashPassword, comparePasswords } = require("../../middleware/bcrypt");
 const { createToken } = require("../../middleware/jsonwebtoken");
 
+<<<<<<<<< Temporary merge branch 1
 const userSingup = async (req,res)=>{
-    const {firstName,lastName,email,phoneNumber,countryName,address,password} = req.data;
+    const {firstName,lastName,email,phoneNumber,countryName,address,password} = req.body;
+=========
+const userSingup = async (req, res) => {
+    const { firstName, lastName, email, phoneNumber, countryName, address, password } = req.body;
+>>>>>>>>> Temporary merge branch 2
     console.log("hello");
     if (!firstName || !email || !password) {
         res.status(401).send(false);
@@ -46,9 +51,14 @@ const userSingup = async (req,res)=>{
 }
 
 
+
 const userLogin = async (req, res) => {
 
-    const {email,password} = req.data;
+<<<<<<<<< Temporary merge branch 1
+    const {email,password} = req.body;
+=========
+    const { email, password } = req.body;
+>>>>>>>>> Temporary merge branch 2
 
     if (email || password) {
 
@@ -86,6 +96,7 @@ const userLogin = async (req, res) => {
             }
 
         } catch (e) {
+
             console.log(e);
         }
     }
