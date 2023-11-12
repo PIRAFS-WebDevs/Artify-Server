@@ -9,7 +9,7 @@ const cart = async (req, res) => {
         if (!previousCart) {
             const newCart = new cartModel({
                 user_id: userId,
-                cart: cartData,
+                item: cartData,
             });
             await newCart.save();
             res.status(200).send({ message: "Cart data saved successfully." });

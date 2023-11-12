@@ -1,3 +1,4 @@
+const userModel = require("../../Model/userModel");
 const userloginModel = require("../../Model/userModel");
 const { hashPassword, comparePasswords } = require("../../middleware/bcrypt");
 const { createToken } = require("../../middleware/jsonwebtoken");
@@ -95,7 +96,37 @@ const userLogin = async (req, res) => {
   }
 };
 
+const ChangePassword = async(req,res)=>{
+  try {
+    const _id = req.params._id;
+    const {password} = req.body;
+    try {
+      const userCheck = await userModel.findOne({_id:_id});
+      if(userCheck){
+        const isMatch = await comparePasswords(password, userCheck.password)
+        if(isMatch){
+          const encryptPassword = await hashPassword(password);
+          const updateValue = await userModel.findByIdAndUpdate({_id:_id},{password})
+
+        }else{
+          res.status(404).send({massage:"Password Does not match"});
+        }
+
+      }else{
+        res.status(404).send({massage: "user not found"});
+      }
+    } catch (error) {
+      res.status(500).send({massage: "error fatching the database"});
+      
+    }
+  } catch (error) {
+    res.status(503).send({massage: "_id not found"});
+    
+  }
+}
+
 module.exports = {
   userSingup,
   userLogin,
+  ChangePassword,
 };
