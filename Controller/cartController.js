@@ -2,7 +2,7 @@ const cartModel = require("../Model/cartModel");
 
 const cart = async (req, res) => {
     try {
-        const cartData = req.data;
+        const {cartData} = req.data;
         const userId = req.params.userId;
         const previousCart = await cartModel.findOne({ user_id: userId });
 
@@ -14,7 +14,7 @@ const cart = async (req, res) => {
             await newCart.save();
             res.status(200).send({ message: "Cart data saved successfully." });
         } else {
-            const mergedCart = mergeCarts(previousCart.cart, cartData);
+            const mergedCart = mergeCarts(previousCart.item, cartData);
             previousCart.cart = mergedCart;
             await previousCart.save();
 
@@ -28,11 +28,14 @@ const cart = async (req, res) => {
 function mergeCarts(previousCart, newCart) {
     const mergedCart = [...previousCart];
     newCart.forEach((newCartItem) => {
-        const existingItemIndex = mergedCart.findIndex((existingItem) => existingItem.productId === newCartItem.productId);
-        if (existingItemIndex === -1) {
-            mergedCart.push(newCartItem);
+        const existingItem = mergedCart.find((item) => item.id.equals(newCartItem.id));
+
+        if (existingItem) {
+            // If the item already exists in the cart, increase the quantity
+            existingItem.quantity += newCartItem.quantity;
         } else {
-            mergedCart[existingItemIndex].quantity += newCartItem.quantity;
+            // If the item is not in the cart, add it
+            mergedCart.push(newCartItem);
         }
     });
     return mergedCart;

@@ -48,40 +48,11 @@ const productSchema = new mongoose.Schema({
         "required": true
     },
     status: {
-        "type": "String",
-        "required": true
+        "type": "Boolean",
+        "default": true
     },
     image: {
         "type": "String",
-        "required": true
-    },
-    video: {
-        "type": "String",
-        "required": true
-    },
-    gallery: {
-        "type": "String",
-        "required": true
-    },
-    deleted_at: {
-        "type": "String",
-        "required": true
-    },
-    created_at: {
-        "type": "String",
-        "required": true
-    },
-    updated_at: {
-        "type": "String",
-        "required": true
-    },
-    author_id: {
-        "type": "String",
-        "required": true
-    },
-    manufacturer_id: {
-        "type": "String",
-        "required": true
     }
 }
 ,{timestamps:true})

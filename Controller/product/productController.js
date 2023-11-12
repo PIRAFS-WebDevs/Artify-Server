@@ -1,14 +1,41 @@
+const cartModel = require("../../Model/cartModel");
 const productModel = require("../../Model/productModel");
 
 const createProduct = async(req,res)=>{
     try {
-        const{product_id,product_name,product_price,product_owner} = req.body;
+        const {
+            id,
+            name,
+            slug,
+            description,
+            type_id,
+            price,
+            shop_id,
+            sale_price,
+            min_price,
+            max_price,
+            quantity,
+            in_stock,
+            status,
+            image,
+        } = req.body;
+       // console.log("hello")
         try {
             const data = await new productModel({
-                product_id,
-                product_name,
-                product_price,
-                product_owner
+                id,
+            name,
+            slug,
+            description,
+            type_id,
+            price,
+            shop_id,
+            sale_price,
+            min_price,
+            max_price,
+            quantity,
+            in_stock,
+            status,
+            image,
             }).save();
 
             res.status(201).send(true);
@@ -60,11 +87,37 @@ const SingleProduct = async (req,res)=>{
 const productUpdate = async(req, res)=>{
     try {
         let _id= req.params._id;
-        let {product_name,product_id,product_price,product_owner} = req.body;
+        let {id,
+            name,
+            slug,
+            description,
+            type_id,
+            price,
+            shop_id,
+            sale_price,
+            min_price,
+            max_price,
+            quantity,
+            in_stock,
+            status,
+            image,} = req.body;
         //console.log('updateValue',updateValue);
         if(_id && updateValue){
             try {
-                const updateValue = await productModel.findByIdAndUpdate({_id:_id},{product_name,product_id,product_owner,product_price},{new:true});
+                const updateValue = await productModel.findByIdAndUpdate({_id:_id},{id,
+                    name,
+                    slug,
+                    description,
+                    type_id,
+                    price,
+                    shop_id,
+                    sale_price,
+                    min_price,
+                    max_price,
+                    quantity,
+                    in_stock,
+                    status,
+                    image,},{new:true});
 
             }catch(e){
                 
@@ -75,9 +128,49 @@ const productUpdate = async(req, res)=>{
     }
 }
 
+const ProductShowForUser = async(req,res)=>{
+    try {
+        const data = await productModel.find({status:true})
+       // console.log(data.name);
+        res.status(200).json(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+const BuyProduct = async(req,res) =>{
+    try {
+        const _id = req.params._id
+        const cartData = await cartModel.findOne({user_id:_id})
+        const items = cartData.item;
+        let totalPrice = 0;
+    
+        for (const item of items) {
+            const product = await productModel.findById(item.id);
+            if (!product) {
+                res.status(404).send(`Product with ID ${item.id} not found`);
+            }
+    
+            // Calculate the total price for the item
+            const itemPrice = parseFloat(product.price) * item.quantity;
+            totalPrice += itemPrice;
+    
+            // Decrease the stock of the product
+            product.quantity -= item.quantity;
+            await product.save();
+        }
+    } catch (error) {
+        
+    }
+}
+
 module.exports ={
     createProduct,
     GetAllProduct,
     SingleProduct,
     productUpdate,
+    ProductShowForUser,
+    BuyProduct
+
 }
