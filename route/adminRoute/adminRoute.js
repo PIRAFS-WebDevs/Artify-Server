@@ -6,10 +6,13 @@ const Router = express.Router();
 
 
 // Create product Route/API:-
-Router.post("/admin/create-product",createProduct);
+Router.post("/admin/product/create-product",createProduct);
 
 //Get All Product Data Route/API:-
-Router.get("/admin/all-product", GetAllProduct)
+Router.get("/admin/product/all-product", GetAllProduct);
+
+//Update product Data Route/API:-
+Router.get("/admin/product/product-update")
 
 
 
