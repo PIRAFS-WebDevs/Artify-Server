@@ -30,7 +30,7 @@ const userSingup = async (req, res) => {
           countryName: countryName,
           address: address,
           password: encryptPassword,
-        }).save();
+        }).save(); 
 
         const token = await createToken(email);
 
