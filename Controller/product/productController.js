@@ -57,8 +57,27 @@ const SingleProduct = async (req,res)=>{
     }
 }
 
+const productUpdate = async(req, res)=>{
+    try {
+        let _id= req.params._id;
+        let {product_name,product_id,product_price,product_owner} = req.body;
+        //console.log('updateValue',updateValue);
+        if(_id && updateValue){
+            try {
+                const updateValue = await productModel.findByIdAndUpdate({_id:_id},{product_name,product_id,product_owner,product_price},{new:true});
+
+            }catch(e){
+                
+            }
+        }
+    }catch(e){
+
+    }
+}
+
 module.exports ={
     createProduct,
     GetAllProduct,
     SingleProduct,
+    productUpdate,
 }
