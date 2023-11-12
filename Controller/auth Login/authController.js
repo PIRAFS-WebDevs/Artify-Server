@@ -47,7 +47,7 @@ const userSingup = async (req, res) => {
         console.log(e);
       }
     } else {
-      res.status(404).send({ massage: "email already exit" });
+      res.status(404).send({ massage: "Email already " });
     }
   }
 };

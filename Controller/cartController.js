@@ -3,7 +3,7 @@ const cartModel = require("../Model/cartModel");
 const cart = async (req, res) => {
     try {
         const {cartData} = req.data;
-        const userId = req.params.userId;
+        const userId = req.params._id;
         const previousCart = await cartModel.findOne({ user_id: userId });
 
         if (!previousCart) {
