@@ -2,19 +2,19 @@ const cartModel = require("../Model/cartModel");
 
 const cart = async (req, res) => {
     try {
-        const {cartData} = req.data;
-        const userId = req.params._id;
+        const {userId,items} = req.body;
+        //const userId = req.params._id;
         const previousCart = await cartModel.findOne({ user_id: userId });
 
         if (!previousCart) {
             const newCart = new cartModel({
                 user_id: userId,
-                item: cartData,
+                item: items,
             });
             await newCart.save();
             res.status(200).send({ message: "Cart data saved successfully." });
         } else {
-            const mergedCart = mergeCarts(previousCart.item, cartData);
+            const mergedCart = mergeCarts(previousCart.item, items);
             previousCart.cart = mergedCart;
             await previousCart.save();
 
