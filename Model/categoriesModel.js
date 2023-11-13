@@ -9,15 +9,12 @@ const categoriesSchema = new mongoose.Schema({
     details:{
         type:String,
         require:true,
-
     },
     image:{
         type:String,
-
     },
     slug:{
         type:String,
-
     }
 })
 

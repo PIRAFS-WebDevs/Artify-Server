@@ -1,0 +1,61 @@
+const categoriesModel = require("../Model/categoriesModel");
+
+const category = async (req,res)=>{
+    try {
+        const {name,details,image,slug} = req.body;
+        try {
+            const checkdata = await categoriesModel.find({name:name});
+            if(!checkdata){
+                await categoriesModel({
+                    name,
+                    details,
+                    image,
+                    slug,
+                }).save();
+                res.status(200).send({massage:"categories Uploaded"})
+            }else{
+                res.status(404).send({massage:"categories all ready exists"})
+            }
+        } catch (error) {
+            res.status(500).send({massage:"Internal server error"});
+            
+        }
+    } catch (error) {
+        res.status(501).send({massage:"fatching value error"})
+        
+    }
+}
+
+const updateCategory = async(req,res)=>{
+    try {
+        const {_id,name,details,image,slug} = req.body;
+        if(!id || !name || !details || !slug){
+            res.status(401).send({massage:"fill proper data"})
+        }else{
+
+            const checkdata = await categoriesModel.findOne({_id:_id});
+            if(checkdata){
+                await categoriesModel.findByIdAndUpdate(_id,{name,details,slug,image},{new:true});
+                res.status(200).send({massage:"update succesfully"});
+            }
+        }
+
+    } catch (error) {
+        res.status(500).send({massage:"internal server error"});
+
+        
+    }
+}
+
+const getCategory = async (req, res)=>{
+    try {
+        const data = await categoriesModel.find()
+    } catch (error) {
+        
+    }
+}
+
+module.exports = {
+category,
+updateCategory
+}
