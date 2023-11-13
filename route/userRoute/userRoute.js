@@ -11,11 +11,11 @@ Router.post("/login",userLogin);
 
 
 //User Change Password Route/API:-
-Router.post("/user/change-pass/:_id",ChangePassword)
+Router.post("/user/change-pass",ChangePassword)
 
 
 //Cart Product Route/API:-
-Router.post("/user/cart/:_id",cart)
+Router.post("/user/cart",cart)
 
 //Signle Product Route/API:-
 //Router.get("/product/:prod_id")
