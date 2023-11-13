@@ -30,6 +30,14 @@ const userSchema = new mongoose.Schema({
     password:{
         type:String,
         require:true,
+    },
+    image:{
+        type:String,
+        
+    },
+    role:{
+        type:String,
+        default:"User",
     }
 },
 { timestamps: true }

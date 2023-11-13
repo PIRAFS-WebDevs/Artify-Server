@@ -49,13 +49,32 @@ const updateCategory = async(req,res)=>{
 
 const getCategory = async (req, res)=>{
     try {
-        const data = await categoriesModel.find()
+        const data = await categoriesModel.find();
+        res.status(200).send({data});
+
     } catch (error) {
         
     }
 }
 
+const categoriesDelete = async (req,res)=>{
+    try {
+      const {_id}=req.body;
+      const checkdata = await categoriesModel.findOne(_id);
+      if(checkdata){
+        await categoriesModel.findByIdAndRemove(_id);
+        res.status(200).send({success:true});
+      }else{
+        res.status(404).send({success:false,massage:"category not found"});
+      }
+    } catch (error) {
+      res.status(404).send({success:false,massage:"internal server error"});
+    }
+  }
+
 module.exports = {
 category,
-updateCategory
+updateCategory,
+getCategory,
+categoriesDelete
 }

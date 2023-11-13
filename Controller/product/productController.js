@@ -102,7 +102,8 @@ const productUpdate = async(req, res)=>{
             status,
             image,} = req.body;
         //console.log('updateValue',updateValue);
-        if(_id && updateValue){
+        const checkdata = await productModel.findOne(_id);
+        if(checkdata){
             try {
                 const updateValue = await productModel.findByIdAndUpdate({_id:_id},{id,
                     name,
@@ -119,12 +120,16 @@ const productUpdate = async(req, res)=>{
                     status,
                     image,},{new:true});
 
+                    res.status(200).send({succes:true,updateValue})
+
             }catch(e){
-                
+                res.status(404).send({success:false,massage:"internal server error"});
             }
+        }else{
+            res.status(404).send({success:false,massage:(`Product with ID ${_id} not found`)});
         }
     }catch(e){
-
+        res.status(404).send({success:false,massage:"internal server error"});
     }
 }
 
@@ -132,9 +137,10 @@ const ProductShowForUser = async(req,res)=>{
     try {
         const data = await productModel.find({status:true})
        // console.log(data.name);
-        res.status(200).json(data);
+        res.status(200).send({success:true,data});
     } catch (error) {
         console.log(error)
+        res.status(404).send({success:false,massage:"internal server error"});
     }
 }
 
@@ -149,7 +155,7 @@ const BuyProduct = async(req,res) =>{
         for (const item of items) {
             const product = await productModel.findById(item.id);
             if (!product) {
-                res.status(404).send(`Product with ID ${item.id} not found`);
+            res.status(404).send({success:false,massage:(`Product with ID ${item.id} not found`)});
             }
     
             // Calculate the total price for the item
@@ -161,16 +167,31 @@ const BuyProduct = async(req,res) =>{
             await product.save();
         }
     } catch (error) {
+        res.status(404).send({success:false,massage:"internal server error"});
         
     }
 }
-
+const ProductDelete = async (req,res)=>{
+    try {
+      const {_id}=req.body;
+      const checkdata = await productModel.findOne(_id);
+      if(checkdata){
+        await productModel.findByIdAndRemove(_id);
+        res.status(200).send({success:true});
+      }else{
+        res.status(404).send({success:false,massage:"product not found"});
+      }
+    } catch (error) {
+      res.status(404).send({success:false,massage:"internal server error"});
+    }
+  }
 module.exports ={
     createProduct,
     GetAllProduct,
     SingleProduct,
     productUpdate,
     ProductShowForUser,
-    BuyProduct
+    BuyProduct,
+    ProductDelete
 
 }
