@@ -42,10 +42,12 @@ const createProduct = async(req,res)=>{
             
         } catch (error) {
             console.log("error while saving the product data ",error);
+            res.status(500).send({success:false,massage:"internal server error"});
             
         }
     } catch (error) {
         console.log("error in get the value ",error);
+        res.status(500).send({success:false,massage:"internal server error"});
         
     }
 }
@@ -67,13 +69,14 @@ const SingleProduct = async (req,res)=>{
             try {
                 const singleData = productModel.findById({_id:_id});
                 if(singleData){
-                    res.status(200).send(singleData)
+                    res.status(200).send({success:true,singleData})
                 }else{
-                    res.status(401).send({"massage":"product not found"});
+                    res.status(401).send({success:false,massage:"product not found"});
                 }
             
             } catch (error) {
                 console.log("error while search the product",error);
+                res.status(500).send({success:false,massage:"internal server error"});
                 
             }
         }
@@ -81,6 +84,7 @@ const SingleProduct = async (req,res)=>{
         
     } catch (error) {
         console.log("error get the value",error);
+        res.status(500).send({success:false,massage:"internal server error"});
     }
 }
 
@@ -182,9 +186,61 @@ const ProductDelete = async (req,res)=>{
         res.status(404).send({success:false,massage:"product not found"});
       }
     } catch (error) {
-      res.status(404).send({success:false,massage:"internal server error"});
+      res.status(500).send({success:false,massage:"internal server error"});
     }
   }
+
+
+const productRatings = async (req,res)=>{
+    try {
+        const {prod_id,user_id,number,text1}= req.body;
+        const text ={
+            user_id:user_id,
+            text:text1
+        }
+        try {
+            const checkData = productModel.findOne(
+                { _id: prod_id, 'activity.ratings.user_id': user_id });
+                if (checkData) {
+                    Product.findOneAndUpdate(
+                      { _id: prod_id, 'activity.ratings.user_id': user_id },
+                      {
+                        $set: { 'activity.ratings.$.number': number },
+                        $push: { 'activity.comment': text },
+                      },
+                      { new: true },
+                      (updateErr, updatedProduct) => {
+                        if (updateErr) {
+                          console.error('Error updating product:', updateErr);
+                        } else {
+                          console.log('Updated product:', updatedProduct);
+                        }
+                      }
+                    );
+                  } else {
+                    Product.findByIdAndUpdate(
+                      prod_id,
+                      {
+                        $push: { 'activity.ratings.user_id': user_id,'activity.ratings.$.number': number, 'activity.comment': text },
+                      },
+                      { new: true },
+                      (updateErr, updatedProduct) => {
+                        if (updateErr) {
+                          console.error('Error updating product:', updateErr);
+                        } else {
+                          console.log('Updated product:', updatedProduct);
+                        }
+                      }
+                    );
+                  
+                }
+        } catch (error) {
+            res.status(500).send({success:false,massage:"internal server error"});
+        }
+    } catch (error) {
+        res.status(500).send({success:false,massage:"internal server error"});
+    }
+}
 module.exports ={
     createProduct,
     GetAllProduct,
@@ -192,6 +248,7 @@ module.exports ={
     productUpdate,
     ProductShowForUser,
     BuyProduct,
-    ProductDelete
+    ProductDelete,
+    productRatings
 
 }

@@ -35,6 +35,8 @@ const updatetags = async(req,res)=>{
             if(checkdata){
                 await tagsModel.findByIdAndUpdate(_id,{name,slug},{new:true});
                 res.status(200).send({success: true,massage:"update succesfully"});
+            }else{
+                res.status(404).send({success:false,massage:"tags not found"});
             }
         }
 
@@ -51,7 +53,7 @@ const gettags = async (req, res)=>{
         res.status(200).send({success:true,data});
 
     } catch (error) {
-        
+        res.status(500).send({success:false,massage:"internal server error"});
     }
 }
 
@@ -66,7 +68,7 @@ const tagsDelete = async (req,res)=>{
         res.status(404).send({success:false,massage:"tags not found"});
       }
     } catch (error) {
-      res.status(404).send({success:false,massage:"internal server error"});
+      res.status(500).send({success:false,massage:"internal server error"});
     }
   }
 

@@ -35,6 +35,8 @@ const updatelayout = async(req,res)=>{
             if(checkdata){
                 await layoutModel.findByIdAndUpdate(_id,{name,icon},{new:true});
                 res.status(200).send({success: true,massage:"update succesfully"});
+            }else{
+                res.status(404).send({success:false,massage:"layout not found"});
             }
         }
 
@@ -51,6 +53,7 @@ const getlayout = async (req, res)=>{
         res.status(200).send({success:true,data});
 
     } catch (error) {
+        res.status(500).send({success:false,massage:"internal server error"});
         
     }
 }

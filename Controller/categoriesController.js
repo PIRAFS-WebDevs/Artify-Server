@@ -37,6 +37,8 @@ const updateCategory = async(req,res)=>{
             if(checkdata){
                 await categoriesModel.findByIdAndUpdate(_id,{name,details,slug,image},{new:true});
                 res.status(200).send({massage:"update succesfully"});
+            }else{
+                res.status(404).send({success:false,massage:"category not found"});
             }
         }
 
@@ -53,7 +55,7 @@ const getCategory = async (req, res)=>{
         res.status(200).send({data});
 
     } catch (error) {
-        
+        res.status(500).send({success:false,massage:"internal server error"});
     }
 }
 
@@ -68,7 +70,7 @@ const categoriesDelete = async (req,res)=>{
         res.status(404).send({success:false,massage:"category not found"});
       }
     } catch (error) {
-      res.status(404).send({success:false,massage:"internal server error"});
+      res.status(500).send({success:false,massage:"internal server error"});
     }
   }
 
