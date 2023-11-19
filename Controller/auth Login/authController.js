@@ -1,30 +1,23 @@
 const userModel = require("../../Model/userModel");
-const userloginModel = require("../../Model/userModel");
 const { hashPassword, comparePasswords } = require("../../middleware/bcrypt");
 const { createToken } = require("../../middleware/jsonwebtoken");
 
-const userSingup = async (req, res) => {
-  const {
-    name,
-    email,
-    photoURL,
-  } = req.body;
+const userSignup = async (req, res) => {
+  const { name, email, photoURL } = req.body;
 
   if (!name || !email) {
     res.status(401).send(false);
   } else {
-    let checkEmail = await userloginModel.find({ email: email });
-
+    let checkEmail = await userModel.findOne({ email: email });
+    console.log(checkEmail);
     //let user = await userModel.findOne({ email });
     if (!checkEmail) {
-      try{
-      user = await new userModel({
-        name: name,
-        email: email,
-        imgURL: photoURL,
-  
-      }).save();
-    
+      try {
+        checkEmail = await new userModel({
+          name: name,
+          email: email,
+          imgURL: photoURL,
+        }).save();
 
         const token = await createToken(email);
 
@@ -34,13 +27,11 @@ const userSingup = async (req, res) => {
         //     sameSite: 'Strict',
         //     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         //   });
+
         res.status(200).send(true);
-      
-      } catch (e) {
-        console.log(e);
+      } catch (err) {
+        console.log(err.message);
       }
-    } else {
-      res.status(404).send({ massage: "Email already " });
     }
   }
 };
@@ -96,83 +87,82 @@ const ChangePassword = async (req, res) => {
     try {
       const userCheck = await userModel.findOne({ _id: _id });
       if (userCheck) {
-        const isMatch = await comparePasswords(password, userCheck.password)
+        const isMatch = await comparePasswords(password, userCheck.password);
         if (isMatch) {
           const encryptPassword = await hashPassword(password);
-          const updateValue = await userModel.findByIdAndUpdate({ _id: _id }, { password })
-
+          const updateValue = await userModel.findByIdAndUpdate(
+            { _id: _id },
+            { password }
+          );
         } else {
           res.status(404).send({ massage: "Password Does not match" });
         }
-
       } else {
         res.status(404).send({ massage: "user not found" });
       }
     } catch (error) {
       res.status(500).send({ massage: "error fatching the database" });
-
     }
   } catch (error) {
     res.status(503).send({ massage: "_id not found" });
-
   }
-}
+};
 
 const updateUserData = async (req, res) => {
   try {
-    const {
-      email,
-      phoneNumber,
-      image,
-    } = req.body;
+    const { email, phoneNumber, image } = req.body;
 
     try {
       const checkdata = await userModel.findOne({ email: email });
       if (checkdata) {
-        const data = await userModel.findByIdAndUpdate(checkdata._id, { email, phoneNumber, image }, { new: true });
+        const data = await userModel.findByIdAndUpdate(
+          checkdata._id,
+          { email, phoneNumber, image },
+          { new: true }
+        );
         res.status(200).send({ success: true, data });
       } else {
-        res.status(404).send({ success: false })
+        res.status(404).send({ success: false });
       }
-
     } catch (error) {
-      res.status(500).send({ success: false, massage: "internal server error" })
-
+      res
+        .status(500)
+        .send({ success: false, massage: "internal server error" });
     }
   } catch (error) {
-    res.status(500).send({ success: false, massage: "internal server error" })
+    res.status(500).send({ success: false, massage: "internal server error" });
   }
-}
+};
 
-const AllUser = async(req,res)=>{
+const AllUser = async (req, res) => {
   try {
-    const data = await userModel.find().select('-password');
-    res.status(200).send({success:true,data});
+    const data = await userModel.find().select("-password");
+    res.status(200).send({ success: true, data });
   } catch (error) {
-    res.status(500).send({success:true,massage:"internal server error"});
+    res.status(500).send({ success: true, massage: "internal server error" });
   }
-}
+};
 
-const UserDelete = async (req,res)=>{
+const UserDelete = async (req, res) => {
   try {
-    const {_id}=req.body;
+    const { _id } = req.body;
     const checkdata = await userModel.findOne(_id);
-    if(checkdata){
+    if (checkdata) {
       await userModel.findByIdAndRemove(_id);
-      res.status(200).send({success:true});
-    }else{
-      res.status(404).send({success:false,massage:"user not found"});
+      res.status(200).send({ success: true });
+    } else {
+      res.status(404).send({ success: false, massage: "user not found" });
     }
   } catch (error) {
-    res.status(404).send({success:false,massage:"internal server error"});
+    res.status(404).send({ success: false, massage: "internal server error" });
   }
-}
+};
 
 module.exports = {
-  userSingup,
-  userLogin,
+  userSignup,
+  // userLogin,
   ChangePassword,
   updateUserData,
   AllUser,
-  UserDelete
+  UserDelete,
 };

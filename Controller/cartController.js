@@ -3,7 +3,7 @@ const cartModel = require("../Model/cartModel");
 const cart = async (req, res) => {
     try {
         const {userId,items} = req.body;
-        //console.log(items);
+        console.log(items);
         //const userId = req.params._id;
         const previousCart = await cartModel.findOne({ user_id: userId });
 
@@ -15,10 +15,12 @@ const cart = async (req, res) => {
             await newCart.save();
             res.status(200).send({ message: "Cart data saved successfully." });
         } else {
-            //console.log("first")
+
             const mergedCart = mergeCarts(previousCart.item, items);
+            previousCart.cart = mergedCart;
             console.log(mergedCart);
-            const data = await cartModel.findByIdAndUpdate(previousCart._id,{item:mergedCart});
+            await previousCart.save();
+            console.log('hellow');
 
             res.status(200).send({ message: "Cart data merged and saved successfully." });
         }
