@@ -8,7 +8,7 @@ const Router = express.Router();
 
 //User Login Route/API
 Router.post("/signup",userSingup);
-Router.post("/login",userLogin);
+// Router.post("/login",userLogin);
 
 
 //User Change Password Route/API:-

@@ -1,11 +1,7 @@
 const mongoose = require("mongoose")
 
 const userSchema = new mongoose.Schema({
-    full_name:{
-        type:String,
-        require:true,
-    },
-    user_name:{
+name:{
         type:String,
         require: true,
         unique:true,
@@ -29,9 +25,8 @@ const userSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        require:true,
     },
-    image:{
+    imgURL:{
         type:String,
         
     },
