@@ -38,8 +38,8 @@ const productSchema = new mongoose.Schema({
         type: String,
     },
     status: {
-        type: Boolean,
-        default: true
+        type: String,
+        enum:["Published","Draft"]
     },
     image: {
         type: String
