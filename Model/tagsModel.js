@@ -7,7 +7,10 @@ const tagsSchema = new mongoose.Schema({
     },
     slug:{
         type:String
-    }
+    },
+    details:{
+        type:String,
+    },
 })
 
 module.exports = mongoose.model("tags",tagsSchema);
