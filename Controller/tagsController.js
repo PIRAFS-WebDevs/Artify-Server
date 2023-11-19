@@ -2,13 +2,13 @@ const tagsModel = require("../Model/tagsModel");
 
 const tags = async (req,res)=>{
     try {
-        const {name,slug} = req.body;
+        const {name,slug, details} = req.body;
         try {
             const checkdata = await tagsModel.find({name:name});
             if(!checkdata){
                 await tagsModel({
                     name,
-                    slug,
+                    slug, details,
                 }).save();
                 res.status(200).send({success: true,massage:"tags Uploaded"})
             }else{
@@ -26,14 +26,14 @@ const tags = async (req,res)=>{
 
 const updatetags = async(req,res)=>{
     try {
-        const {_id,name,slug} = req.body;
-        if(!id || !name || !slug){
+        const {_id,name,slug, details} = req.body;
+        if(!id || !name || !slug || !details){
             res.status(401).send({success: false,massage:"fill proper data"})
         }else{
 
             const checkdata = await tagsModel.findOne({_id:_id});
             if(checkdata){
-                await tagsModel.findByIdAndUpdate(_id,{name,slug},{new:true});
+                await tagsModel.findByIdAndUpdate(_id,{name,slug, details},{new:true});
                 res.status(200).send({success: true,massage:"update succesfully"});
             }else{
                 res.status(404).send({success:false,massage:"tags not found"});
