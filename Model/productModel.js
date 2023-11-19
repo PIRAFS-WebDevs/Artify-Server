@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-    id: {
-        type: String,
-        required: true
-    },
     name: {
         type: String,
         required: true
@@ -12,6 +8,15 @@ const productSchema = new mongoose.Schema({
     slug: {
         type: String,
         required: true
+    },
+    categories:{
+        type:[String],
+    },
+    tags:{
+        type:[String],
+    },
+    layout:{
+        type:String,
     },
     description: {
         type: String,
@@ -23,29 +28,14 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    shop_id: {
-        type: String,
-        required: true
-    },
     sale_price: {
         type: String,
-        required: true
-    },
-    min_price: {
-        type: String,
-        required: true
     },
     max_price: {
         type: String,
-        required: true
-    },
-    quantity: {
-        type: String,
-        required: true
-    },
+    },  
     in_stock: {
         type: String,
-        required: true
     },
     status: {
         type: Boolean,
@@ -76,6 +66,9 @@ const productSchema = new mongoose.Schema({
             }
         ]
 
+    },
+    preview_url:{
+        type:String,
     }
 }
     , { timestamps: true })

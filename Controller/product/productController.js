@@ -4,38 +4,28 @@ const productModel = require("../../Model/productModel");
 const createProduct = async(req,res)=>{
     try {
         const {
-            id,
             name,
             slug,
             description,
-            type_id,
             price,
-            shop_id,
             sale_price,
-            min_price,
-            max_price,
-            quantity,
-            in_stock,
             status,
-            image,
+            categories,
+            layout,
+            tags
         } = req.body;
        // console.log("hello")
         try {
             const data = await new productModel({
-                id,
-            name,
-            slug,
-            description,
-            type_id,
-            price,
-            shop_id,
-            sale_price,
-            min_price,
-            max_price,
-            quantity,
-            in_stock,
-            status,
-            image,
+                name,
+                slug,
+                description,
+                price,
+                sale_price,
+                status,
+                categories,
+                layout,
+                tags
             }).save();
 
             res.status(201).send(true);
@@ -91,38 +81,29 @@ const SingleProduct = async (req,res)=>{
 const productUpdate = async(req, res)=>{
     try {
         let _id= req.params._id;
-        let {id,
-            name,
+        let {name,
             slug,
             description,
-            type_id,
             price,
-            shop_id,
             sale_price,
-            min_price,
-            max_price,
-            quantity,
-            in_stock,
             status,
-            image,} = req.body;
+            categories,
+            layout,
+            tags} = req.body;
         //console.log('updateValue',updateValue);
         const checkdata = await productModel.findOne(_id);
         if(checkdata){
             try {
                 const updateValue = await productModel.findByIdAndUpdate({_id:_id},{id,
                     name,
-                    slug,
-                    description,
-                    type_id,
-                    price,
-                    shop_id,
-                    sale_price,
-                    min_price,
-                    max_price,
-                    quantity,
-                    in_stock,
-                    status,
-                    image,},{new:true});
+            slug,
+            description,
+            price,
+            sale_price,
+            status,
+            categories,
+            layout,
+            tags},{new:true});
 
                     res.status(200).send({succes:true,updateValue})
 
