@@ -2,14 +2,13 @@ const categoriesModel = require("../Model/categoriesModel");
 
 const category = async (req,res)=>{
     try {
-        const {name,details,image,slug} = req.body;
+        const {name,details,slug} = req.body;
         try {
             const checkdata = await categoriesModel.find({name:name});
             if(!checkdata){
                 await categoriesModel({
                     name,
                     details,
-                    image,
                     slug,
                 }).save();
                 res.status(200).send({massage:"categories Uploaded"})
@@ -28,14 +27,14 @@ const category = async (req,res)=>{
 
 const updateCategory = async(req,res)=>{
     try {
-        const {_id,name,details,image,slug} = req.body;
+        const {_id,name,details,slug} = req.body;
         if(!id || !name || !details || !slug){
             res.status(401).send({massage:"fill proper data"})
         }else{
 
             const checkdata = await categoriesModel.findOne({_id:_id});
             if(checkdata){
-                await categoriesModel.findByIdAndUpdate(_id,{name,details,slug,image},{new:true});
+                await categoriesModel.findByIdAndUpdate(_id,{name,details,slug},{new:true});
                 res.status(200).send({massage:"update succesfully"});
             }else{
                 res.status(404).send({success:false,massage:"category not found"});
