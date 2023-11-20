@@ -2,13 +2,13 @@ const layoutModel = require("../Model/layoutModel");
 
 const layout = async (req,res)=>{
     try {
-        const {name,icon} = req.body;
+        const {name,slug, details} = req.body;
         try {
             const checkdata = await layoutModel.find({name:name});
             if(!checkdata){
                 await layoutModel({
                     name,
-                    icon,
+                    slug, details,
                 }).save();
                 res.status(200).send({success: true,massage:"layout Uploaded"})
             }else{
@@ -26,14 +26,14 @@ const layout = async (req,res)=>{
 
 const updatelayout = async(req,res)=>{
     try {
-        const {_id,name,icon} = req.body;
-        if(!id || !name || !icon){
+        const {_id,name,slug, details} = req.body;
+        if(!id || !name || !slug || !details){
             res.status(401).send({success: false,massage:"fill proper data"})
         }else{
 
             const checkdata = await layoutModel.findOne({_id:_id});
             if(checkdata){
-                await layoutModel.findByIdAndUpdate(_id,{name,icon},{new:true});
+                await layoutModel.findByIdAndUpdate(_id,{name,slug, details},{new:true});
                 res.status(200).send({success: true,massage:"update succesfully"});
             }else{
                 res.status(404).send({success:false,massage:"layout not found"});
