@@ -59,6 +59,7 @@ const categoriesDelete = async (req, res) => {
   try {
     const { _id } = req.body;
     const checkdata = await categoriesModel.findOne(_id);
+
     if (checkdata) {
       await categoriesModel.findByIdAndRemove(_id);
       res.status(200).send({ success: true });
