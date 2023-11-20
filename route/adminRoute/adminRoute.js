@@ -3,10 +3,12 @@ const { createProduct, GetAllProduct, productUpdate, ProductDelete } = require("
 const { category, updateCategory, categoriesDelete, getCategory } = require("../../Controller/categoriesController");
 const { gettags, tagsDelete, updatetags, tags } = require("../../Controller/tagsController");
 const { layout, updatelayout, layoutDelete, getlayout } = require("../../Controller/layoutController");
+const { AllUser } = require("../../Controller/auth Login/authController");
 const Router = express.Router();
 
 
-
+//All user
+Router.get("/admin/user/all-user",AllUser);
 
 // Create product Route/API:-
 Router.post("/admin/product/create-product",createProduct);
