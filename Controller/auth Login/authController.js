@@ -145,9 +145,9 @@ const AllUser = async (req, res) => {
 
 const Singleuser = async (req,res)=>{
   try {
-    const {email}= req.params.email;
+    const email= req.params.email;
     try {
-       const data = userModel.findOne({email:email});
+       const data = await userModel.findOne({email:email});
        if(data){
         res.status(200).send({success:true,data});
        }else{
