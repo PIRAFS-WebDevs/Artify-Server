@@ -120,7 +120,7 @@ const productUpdate = async(req, res)=>{
 
 const ProductShowForUser = async(req,res)=>{
     try {
-        const data = await productModel.find({status:true})
+        const data = await productModel.find({status:"Published"})
        // console.log(data.name);
         res.status(200).send({success:true,data});
     } catch (error) {

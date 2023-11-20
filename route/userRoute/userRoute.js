@@ -12,6 +12,7 @@ const {
   BuyProduct,
 } = require("../../Controller/product/productController");
 const { getCategory } = require("../../Controller/categoriesController");
+const { findProducts } = require("../../Controller/product/searchProduct");
 const Router = express.Router();
 
 //User Login Route/API
@@ -33,5 +34,8 @@ Router.get("/user/all-product", ProductShowForUser);
 
 //All category show Route:-
 Router.get("/all-category", getCategory);
+
+//search product
+Router.post("/search-product",findProducts)
 
 module.exports = Router;
