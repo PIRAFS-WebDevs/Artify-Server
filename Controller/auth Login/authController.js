@@ -143,21 +143,21 @@ const AllUser = async (req, res) => {
   }
 };
 
-const Singleuser = async (req,res)=>{
+const Singleuser = async (req, res) => {
   try {
-    const email= req.params.email;
+    const email = req.params.email;
     try {
-       const data = await userModel.findOne({email:email});
-       if(data){
-        res.status(200).send({success:true,data});
-       }else{
-        res.status(404).send({success:false,massage:"user not found"});
-       }
+      const data = await userModel.findOne({ email: email });
+      if (data) {
+        res.status(200).send({ success: true, data });
+      } else {
+        res.status(404).send({ success: false, massage: "user not found" });
+      }
     } catch (error) {
-      res.status(500).send({success:false,massage:"internal server error"});
+      res.status(500).send({ success: false, massage: "internal server error" });
     }
   } catch (error) {
-    res.status(500).send({success:false,massage:"internal server error"});
+    res.status(500).send({ success: false, massage: "internal server error" });
   }
 }
 
