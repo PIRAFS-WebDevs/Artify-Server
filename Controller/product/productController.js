@@ -120,7 +120,7 @@ const productUpdate = async(req, res)=>{
 
 const ProductShowForUser = async(req,res)=>{
     try {
-        const data = await productModel.find({status:true})
+        const data = await productModel.find({status:"Published"})
        // console.log(data.name);
         res.status(200).send({success:true,data});
     } catch (error) {
@@ -158,7 +158,7 @@ const BuyProduct = async(req,res) =>{
 }
 const ProductDelete = async (req,res)=>{
     try {
-      const {_id}=req.body;
+      const _id=req.params._id;
       const checkdata = await productModel.findOne(_id);
       if(checkdata){
         await productModel.findByIdAndRemove(_id);
