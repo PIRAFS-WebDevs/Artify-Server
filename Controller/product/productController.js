@@ -158,7 +158,7 @@ const BuyProduct = async(req,res) =>{
 }
 const ProductDelete = async (req,res)=>{
     try {
-      const {_id}=req.body;
+      const _id=req.params._id;
       const checkdata = await productModel.findOne(_id);
       if(checkdata){
         await productModel.findByIdAndRemove(_id);
