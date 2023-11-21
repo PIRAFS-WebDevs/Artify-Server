@@ -164,9 +164,9 @@ const Singleuser = async (req, res) => {
 const UserDelete = async (req, res) => {
   try {
     const _id = req.params._id;
-    const checkdata = await userModel.findOne(_id);
+    const checkdata = await userModel.findOne({_id:_id});
     if (checkdata) {
-      await userModel.findByIdAndRemove(_id);
+    await userModel.findByIdAndDelete({_id:checkdata._id});
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "user not found" });
