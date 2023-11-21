@@ -181,9 +181,14 @@ const UserRoleChange = async (req,res)=>{
     try {
     const checkData = await userModel.findOne({_id:_id});
     if(checkData){
-      
+      try {
         const resData = await userModel.findByIdAndUpdate({_id:checkData._id},{role:role},{new:true});
+        console.log(resData)
         res.status(200).send({success:true, resData});
+      } catch (error) {
+        res.status(500).send({success:false,massage:"internal server error"});
+      }
+        
       }else{
         res.status(404).send({success:false,massage:"user not found"});
       } 

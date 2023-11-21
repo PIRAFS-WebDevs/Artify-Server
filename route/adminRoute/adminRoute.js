@@ -34,7 +34,7 @@ const Router = express.Router();
 //All user
 Router.get("/admin/user/all-user", AllUser);
 //Change user role Route/API:-
-Router.post("/admin/user/change-role",UserRoleChange);
+Router.patch("/admin/user/change-role",UserRoleChange);
 //single user
 Router.get("/admin/user/single-user/:email", Singleuser);
 //Admin user Delete Route/API:-
