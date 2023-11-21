@@ -179,10 +179,10 @@ const UserRoleChange = async (req,res)=>{
   try {
     const {_id,role} = req.body;
     try {
-    const checkData = userModel.findOne({_id:_id});
+    const checkData = await userModel.findOne({_id:_id});
     if(checkData){
       
-        const resData = userModel.findByIdAndUpdate({_id:checkData._id},{role:role},{new:true});
+        const resData = await userModel.findByIdAndUpdate({_id:checkData._id},{role:role},{new:true});
         res.status(200).send({success:true, resData});
       }else{
         res.status(404).send({success:false,massage:"user not found"});
