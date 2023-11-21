@@ -210,9 +210,9 @@ const UserRoleChange = async (req, res) => {
 };
 const SearchUser = async (req, res) => {
   try {
-    const text = req.params.text;
+    const text = req.query.text;
     console.log(text);
-    if (text != "null") {
+    if (text) {
       try {
         const user = await userModel
           .find({

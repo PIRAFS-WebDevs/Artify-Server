@@ -30,25 +30,24 @@ const {
   UserDelete,
   SearchUser,
 } = require("../../Controller/auth Login/authController");
+const { findProducts } = require("../../Controller/product/searchProduct");
 const Router = express.Router();
 
 //All user
 //Router.get("/admin/user/all-user", AllUser);
 //Change user role Route/API:-
-Router.patch("/admin/user/change-role",UserRoleChange);
+Router.patch("/admin/user/change-role", UserRoleChange);
 //single user
 Router.get("/admin/user/single-user/:email", Singleuser);
 //Admin user Delete Route/API:-
-Router.delete("/admin/user/delete-user/:_id",UserDelete);
+Router.delete("/admin/user/delete-user/:_id", UserDelete);
 //Search user Route/API:-
-Router.get("/admin/user/all-user/:text",SearchUser);
-
-
+Router.get("/admin/user/all-user/", SearchUser);
 
 // Create product Route/API:-
 Router.post("/admin/product/create-product", createProduct);
 //Get All Product Data Route/API:-
-Router.get("/admin/product/all-product", GetAllProduct);
+Router.get("/admin/product/all-product/", findProducts);
 //Update product Data Route/API:-
 Router.get("/admin/product/product-update/:_id", productUpdate);
 //Delate product Data Route/API:-
