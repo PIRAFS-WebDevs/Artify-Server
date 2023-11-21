@@ -33,7 +33,7 @@ const {
 const Router = express.Router();
 
 //All user
-Router.get("/admin/user/all-user", AllUser);
+//Router.get("/admin/user/all-user", AllUser);
 //Change user role Route/API:-
 Router.patch("/admin/user/change-role",UserRoleChange);
 //single user
@@ -41,7 +41,7 @@ Router.get("/admin/user/single-user/:email", Singleuser);
 //Admin user Delete Route/API:-
 Router.delete("/admin/user/delete-user/:_id",UserDelete);
 //Search user Route/API:-
-Router.get("/admin/user/search-user/:text",SearchUser);
+Router.get("/admin/user/all-user/:text",SearchUser);
 
 
 
