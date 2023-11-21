@@ -33,14 +33,14 @@ const findProducts = async (req,res) =>{
         }else{
           try {
               const products = await productModel.find(
-                  {
-                    $or: [
-                      { name: { $regex: new RegExp(text, 'i') } },
-                      { categories: { $in: [text] } },
-                      { tags: { $in: [text] } },
-                      { layout: { $regex: new RegExp(text, 'i') } },
-                    ],
-                  }
+                  // {
+                  //   $or: [
+                  //     { name: { $regex: new RegExp(text, 'i') } },
+                  //     { categories: { $in: [text] } },
+                  //     { tags: { $in: [text] } },
+                  //     { layout: { $regex: new RegExp(text, 'i') } },
+                  //   ],
+                  // }
                 )
                 .sort({ name: 1 });
                 console.log(products)
