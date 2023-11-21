@@ -28,6 +28,7 @@ const {
   Singleuser,
   UserRoleChange,
   UserDelete,
+  SearchUser,
 } = require("../../Controller/auth Login/authController");
 const Router = express.Router();
 
@@ -39,6 +40,10 @@ Router.patch("/admin/user/change-role",UserRoleChange);
 Router.get("/admin/user/single-user/:email", Singleuser);
 //Admin user Delete Route/API:-
 Router.delete("/admin/user/delete-user/:_id",UserDelete);
+//Search user Route/API:-
+Router.get("/admin/user/search-user/:text",SearchUser);
+
+
 
 // Create product Route/API:-
 Router.post("/admin/product/create-product", createProduct);

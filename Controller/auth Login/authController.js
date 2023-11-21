@@ -199,6 +199,36 @@ const UserRoleChange = async (req,res)=>{
     res.status(500).send({success:false,massage:"internal server error"});
   }
 }
+const SearchUser = async (req,res)=>{
+  try {
+    const text = req.params.text;
+    console.log(text)
+    try {
+        const user = await userModel.find(
+            {
+              $or: [
+                { name: { $regex: new RegExp(text, 'i') } },
+                { email: { $regex: new RegExp(text, 'i') } },
+                { role: { $regex: new RegExp(text, 'i') } },
+              ],
+            }
+          )
+          .sort({ name: 1 });
+          console.log(user)
+          if(user.length != 0){
+
+              res.status(200).send({success:true,user});
+          }else{
+            res.status(400).send({success:false,massage:"user not found"})
+          }
+      
+    } catch (error) {
+        res.status(500).send({success:false,massage:"internal server error"});
+    }
+} catch (error) {
+    res.status(500).send({success:false,massage:"internal server error"});
+}
+}
 
 module.exports = {
   userSignup,
@@ -209,4 +239,5 @@ module.exports = {
   UserDelete,
   Singleuser,
   UserRoleChange,
+  SearchUser,
 };
