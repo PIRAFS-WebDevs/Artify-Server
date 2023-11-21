@@ -154,19 +154,21 @@ const Singleuser = async (req, res) => {
         res.status(404).send({ success: false, massage: "user not found" });
       }
     } catch (error) {
-      res.status(500).send({ success: false, massage: "internal server error" });
+      res
+        .status(500)
+        .send({ success: false, massage: "internal server error" });
     }
   } catch (error) {
     res.status(500).send({ success: false, massage: "internal server error" });
   }
-}
+};
 
 const UserDelete = async (req, res) => {
   try {
     const _id = req.params._id;
-    const checkdata = await userModel.findOne({_id:_id});
+    const checkdata = await userModel.findOne({ _id: _id });
     if (checkdata) {
-    await userModel.findByIdAndDelete({_id:checkdata._id});
+      await userModel.findByIdAndDelete({ _id: checkdata._id });
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "user not found" });
@@ -175,86 +177,92 @@ const UserDelete = async (req, res) => {
     res.status(404).send({ success: false, massage: "internal server error" });
   }
 };
-const UserRoleChange = async (req,res)=>{
+const UserRoleChange = async (req, res) => {
   try {
-    const {_id,role} = req.body;
+    const { _id, role } = req.body;
     try {
-    const checkData = await userModel.findOne({_id:_id});
-    if(checkData){
-      try {
-        const resData = await userModel.findByIdAndUpdate({_id:checkData._id},{role:role},{new:true});
-        console.log(resData)
-        res.status(200).send({success:true, resData});
-      } catch (error) {
-        res.status(500).send({success:false,massage:"internal server error"});
+      const checkData = await userModel.findOne({ _id: _id });
+      if (checkData) {
+        try {
+          const resData = await userModel.findByIdAndUpdate(
+            { _id: checkData._id },
+            { role: role },
+            { new: true }
+          );
+          console.log(resData);
+          res.status(200).send({ success: true, resData });
+        } catch (error) {
+          res
+            .status(500)
+            .send({ success: false, massage: "internal server error" });
+        }
+      } else {
+        res.status(404).send({ success: false, massage: "user not found" });
       }
-        
-      }else{
-        res.status(404).send({success:false,massage:"user not found"});
-      } 
     } catch (error) {
-      res.status(500).send({success:false,massage:"internal server error"});
+      res
+        .status(500)
+        .send({ success: false, massage: "internal server error" });
     }
   } catch (error) {
-    res.status(500).send({success:false,massage:"internal server error"});
+    res.status(500).send({ success: false, massage: "internal server error" });
   }
-}
-const SearchUser = async (req,res)=>{
+};
+const SearchUser = async (req, res) => {
   try {
     const text = req.params.text;
-    console.log(text)
-    if(text != " "){
-
+    console.log(text);
+    if (text != "null") {
       try {
-          const user = await userModel.find(
-              {
-                $or: [
-                  { name: { $regex: new RegExp(text, 'i') } },
-                  { email: { $regex: new RegExp(text, 'i') } },
-                  { role: { $regex: new RegExp(text, 'i') } },
-                ],
-              }
-            )
-            .sort({ name: 1 });
-            console.log(user)
-            if(user.length != 0){
-  
-                res.status(200).send({success:true,user});
-            }else{
-              res.status(400).send({success:false,massage:"user not found"})
-            }
-        
-      } catch (error) {
-          res.status(500).send({success:false,massage:"internal server error"});
-      }
-    }else{
-      try {
-        const user = await userModel.find(
-            // {
-            //   $or: [
-            //     { name: { $regex: new RegExp(text, 'i') } },
-            //     { email: { $regex: new RegExp(text, 'i') } },
-            //     { role: { $regex: new RegExp(text, 'i') } },
-            //   ],
-            // }
-          )
+        const user = await userModel
+          .find({
+            $or: [
+              { name: { $regex: new RegExp(text, "i") } },
+              { email: { $regex: new RegExp(text, "i") } },
+              { role: { $regex: new RegExp(text, "i") } },
+            ],
+          })
           .sort({ name: 1 });
-          console.log(user)
-          if(user.length != 0){
-
-              res.status(200).send({success:true,user});
-          }else{
-            res.status(400).send({success:false,massage:"user not found"})
-          }
-      
-    } catch (error) {
-        res.status(500).send({success:false,massage:"internal server error"});
+        console.log(user);
+        if (user.length != 0) {
+          res.status(200).send({ success: true, user });
+        } else {
+          res.status(400).send({ success: false, massage: "user not found" });
+        }
+      } catch (error) {
+        res
+          .status(500)
+          .send({ success: false, massage: "internal server error" });
+      }
+    } else {
+      try {
+        const user = await userModel
+          .find
+          // {
+          //   $or: [
+          //     { name: { $regex: new RegExp(text, 'i') } },
+          //     { email: { $regex: new RegExp(text, 'i') } },
+          //     { role: { $regex: new RegExp(text, 'i') } },
+          //   ],
+          // }
+          ()
+          .sort({ name: 1 });
+        console.log(user);
+        if (user.length != 0) {
+          res.status(200).send({ success: true, user });
+        } else {
+          res.status(400).send({ success: false, massage: "user not found" });
+        }
+      } catch (error) {
+        res
+          .status(500)
+          .send({ success: false, massage: "internal server error" });
+      }
     }
-    }
-} catch (error) {
-    res.status(500).send({success:false,massage:"internal server error"});
-}
-}
+  } catch (error) {
+    res.status(500).send({ success: false, massage: "internal server error" });
+  }
+};
 
 module.exports = {
   userSignup,
