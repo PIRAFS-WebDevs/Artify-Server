@@ -163,7 +163,7 @@ const Singleuser = async (req, res) => {
 
 const UserDelete = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const _id = req.params._id;
     const checkdata = await userModel.findOne(_id);
     if (checkdata) {
       await userModel.findByIdAndRemove(_id);
@@ -175,6 +175,25 @@ const UserDelete = async (req, res) => {
     res.status(404).send({ success: false, massage: "internal server error" });
   }
 };
+const UserRoleChange = async (req,res)=>{
+  try {
+    const {_id,role} = req.body;
+    try {
+    const checkData = userModel.findOne({_id:_id});
+    if(checkData){
+      
+        const resData = userModel.findByIdAndUpdate({_id:checkData._id},{role:role},{new:true});
+        res.status(200).send({success:true, resData});
+      }else{
+        res.status(404).send({success:false,massage:"user not found"});
+      } 
+    } catch (error) {
+      res.status(500).send({success:false,massage:"internal server error"});
+    }
+  } catch (error) {
+    res.status(500).send({success:false,massage:"internal server error"});
+  }
+}
 
 module.exports = {
   userSignup,
@@ -184,4 +203,5 @@ module.exports = {
   AllUser,
   UserDelete,
   Singleuser,
+  UserRoleChange,
 };
