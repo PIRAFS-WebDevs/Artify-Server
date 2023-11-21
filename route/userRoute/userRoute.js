@@ -28,7 +28,7 @@ Router.post("/user/cart", cart);
 Router.get("/user/proced-to-pay", BuyProduct);
 
 //Signle Product Route/API:-
-Router.get("/product/:prod_id", SingleProduct);
+Router.get("/product/:_id", SingleProduct);
 //All Product Route/API:-
 Router.get("/user/all-product", ProductShowForUser);
 
@@ -36,6 +36,6 @@ Router.get("/user/all-product", ProductShowForUser);
 Router.get("/all-category", getCategory);
 
 //search product
-Router.post("/search-product",findProducts)
+Router.post("/search-product", findProducts);
 
 module.exports = Router;

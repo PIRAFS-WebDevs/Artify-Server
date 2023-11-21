@@ -50,10 +50,14 @@ const GetAllProduct = async (req, res) => {
 
 const SingleProduct = async (req, res) => {
   try {
-    const { _id } = req.body;
+    const _id = req.params._id;
+    console.log(
+      "🚀 ~ file: productController.js:54 ~ SingleProduct ~ _id:",
+      _id
+    );
     if (_id) {
       try {
-        const singleData = productModel.findById({ _id: _id });
+        const singleData = await productModel.findById({ _id: _id });
         if (singleData) {
           res.status(200).send({ success: true, singleData });
         } else {
