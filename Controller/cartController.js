@@ -45,6 +45,22 @@ function mergeCarts(previousCart, newCart) {
     //console.log(mergeCarts)
     return mergedCart;
 }
+const getCart = async (req,res)=>{
+    try {
+        const _id = req.params._id;
+
+        const data = await cartModel.findone({_id:_id});
+        if(data){
+            res.status(200).send({success:true,data});
+        }else{
+            res.status(404).send({success:false,masaage:"cart not found"});
+
+        }
+    } catch (error) {
+        res.status(500).send({success:false,masaage:"internal server error"});
+    }
+}
 module.exports = {
     cart,
+    getCart
 }
