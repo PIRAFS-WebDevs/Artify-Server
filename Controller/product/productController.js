@@ -1,7 +1,26 @@
 const cartModel = require("../../Model/cartModel");
 const productModel = require("../../Model/productModel");
+const multer = require("multer");
+const sharp = require("sharp");
+const path = require("path");
+const fs = require("fs");
+const { dirname } = require('path');
+const { fileURLToPath } = require('url');
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, '../../Photo/productPhoto')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  },
+});
+
+
 
 const createProduct = async (req, res) => {
+  console.log(req.body)
   try {
     const {
       name,
@@ -14,8 +33,52 @@ const createProduct = async (req, res) => {
       layout,
       tags,
     } = req.body;
+    const arrImages = [];
     // console.log("hello")
+    console.log(req.files)
+    if (req.files) {
+      try {
+        const resizeAndConvertPromises = req.files.map((file) => {
+          return new Promise((resolve, reject) => {
+            sharp(file.path)
+              .resize({ width: 440, height: 440, fit: "inside" })
+              .toFormat("webp", { quality: 100 })
+              .toFile(path.join(path.dirname(file.path), file.filename + ".webp"), (err) => {
+                if (err) {
+                  console.error("Error resizing and converting image:", err);
+                  reject(err); // Reject the promise in case of an error
+                } else {
+                  fs.unlink(file.path, (unlinkErr) => {
+                    if (unlinkErr) {
+                      console.error("Error deleting file:", unlinkErr);
+                    } else {
+                      console.log("File deleted successfully:", file.path);
+                    }
+                  });
+                  arrImages.push(process.env.IMAGE_SPACE_SERVER + "/productPhoto/" + file.filename + ".webp");
+                  resolve();
+                }
+              });
+          });
+        });
+
+        await Promise.all(resizeAndConvertPromises); // Wait for all images to be processed
+      } catch (error) {
+        console.error("Error processing images:", error);
+        return res.status(500).send("Error processing images");
+      }
+    }
+
+    // const images = [];
+    // const img = arrImages[0];
+    // if (arrImages[1]) {
+    //   images[0] = arrImages[1];
+    // }
+    // if (arrImages[2]) {
+    //   images[1] = arrImages[2];
+    // }
     try {
+      console.log(arrImages)
       const data = await new productModel({
         name,
         slug,
@@ -26,6 +89,7 @@ const createProduct = async (req, res) => {
         categories,
         layout,
         tags,
+        image:arrImages,
       }).save();
 
       res.status(201).send(true);

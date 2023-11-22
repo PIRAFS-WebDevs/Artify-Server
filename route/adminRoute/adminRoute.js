@@ -1,4 +1,5 @@
 const express = require("express");
+const multer = require("multer");
 const {
   createProduct,
   GetAllProduct,
@@ -31,7 +32,20 @@ const {
   SearchUser,
 } = require("../../Controller/auth Login/authController");
 const { findProducts } = require("../../Controller/product/searchProduct");
+
 const Router = express.Router();
+
+const productStorage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './Photo/productPhoto')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+    cb(null, file.fieldname + '-' + uniqueSuffix)
+  },
+});
+
+const productUpload = multer({ storage: productStorage });
 
 //All user
 //Router.get("/admin/user/all-user", AllUser);
@@ -45,7 +59,7 @@ Router.delete("/admin/user/delete-user/:_id", UserDelete);
 Router.get("/admin/user/all-user/", SearchUser);
 
 // Create product Route/API:-
-Router.post("/admin/product/create-product", createProduct);
+Router.post("/admin/product/create-product",productUpload.array('images'), createProduct);
 //Get All Product Data Route/API:-
 Router.get("/admin/product/all-product/", findProducts);
 //Update product Data Route/API:-

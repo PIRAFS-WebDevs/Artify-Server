@@ -42,7 +42,7 @@ const productSchema = new mongoose.Schema({
         enum:["Published","Draft"]
     },
     image: {
-        type: String
+        type: [String]
     }, activity: {
         ratings: [{
             user_id: {
