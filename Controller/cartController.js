@@ -17,7 +17,8 @@ const cart = async (req, res) => {
         } else {
 
             const mergedCart = mergeCarts(previousCart.item, items);
-            previousCart.cart = mergedCart;
+            previousCart.item = mergedCart;
+            console.log("he")
             console.log(mergedCart);
             await previousCart.save();
             console.log('hellow');
