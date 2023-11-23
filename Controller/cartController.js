@@ -16,11 +16,18 @@ const cart = async (req, res) => {
       res.status(200).send({ message: "Cart data saved successfully." });
     } else {
       console.log("cartsss");
+      // const mergedCart = mergeCarts(previousCart.item, items);
+      // previousCart.item = mergedCart;
+      // console.log(mergedCart);
+      // console.log("hellow");
+      // await previousCart.save();
+
       const mergedCart = mergeCarts(previousCart.item, items);
       previousCart.item = mergedCart;
+      console.log("he");
       console.log(mergedCart);
-      console.log("hellow");
       await previousCart.save();
+      console.log("hellow");
 
       res
         .status(200)
