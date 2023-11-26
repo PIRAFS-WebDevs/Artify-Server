@@ -59,9 +59,9 @@ function mergeCarts(previousCart, newCart) {
 const getCart = async (req, res) => {
   try {
     const _id = req.params._id;
-    console.log("🚀 ~ file: cartController.js:55 ~ getCart ~ _id:", _id);
+    //console.log("🚀 ~ file: cartController.js:55 ~ getCart ~ _id:", _id);
 
-    const data = await cartModel.findOne({ user_id: _id });
+    const data = await cartModel.findOne({ user_id: _id }).populate('User');
     if (data) {
       res.status(200).send({ success: true, data });
     } else {
