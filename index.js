@@ -15,7 +15,7 @@ const port = process.env.PORT || 8080;
 connectDatabase();
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://waresun-client-nine.vercel.app/"],
+  origin: ["http://localhost:3000", "https://waresun-client-nine.vercel.app"],
   credentials: true,
 };
 
