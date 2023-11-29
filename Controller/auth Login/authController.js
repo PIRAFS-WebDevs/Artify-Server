@@ -6,7 +6,7 @@ const userSignup = async (req, res) => {
   const { name, email, photoURL } = req.body;
 
   if (!name || !email) {
-    res.status(401).send(false);
+    res.status(401).send({success:false});
   } else {
     let checkEmail = await userModel.findOne({ email: email });
     console.log(checkEmail);
@@ -28,7 +28,7 @@ const userSignup = async (req, res) => {
         //     expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         //   });
 
-        res.status(200).send(true);
+        res.status(200).send({success:true});
       } catch (err) {
         console.log(err.message);
       }
@@ -95,16 +95,16 @@ const ChangePassword = async (req, res) => {
             { password }
           );
         } else {
-          res.status(404).send({ massage: "Password Does not match" });
+          res.status(404).send({ success:false,massage: "Password Does not match" });
         }
       } else {
-        res.status(404).send({ massage: "user not found" });
+        res.status(404).send({ success:false,massage: "user not found" });
       }
     } catch (error) {
-      res.status(500).send({ massage: "error fatching the database" });
+      res.status(500).send({ success:false,massage: "error fatching the database" });
     }
   } catch (error) {
-    res.status(503).send({ massage: "_id not found" });
+    res.status(503).send({ success:false,massage: "_id not found" });
   }
 };
 

@@ -72,7 +72,7 @@ Router.post("/admin/category/create-category", category);
 //update a category
 Router.patch("/admin/category/category-update/:_id", updateCategory);
 //delate a category
-Router.post("/admin/category/category-delate/:_id", categoriesDelete);
+Router.delete("/admin/category/category-delate/:_id", categoriesDelete);
 //show all category
 Router.get("/admin/category/all-category", getCategory);
 
@@ -81,7 +81,7 @@ Router.post("/admin/tags/create-tags", tags);
 //update a tags
 Router.patch("/admin/tags/tags-update/:_id", updatetags);
 //delate a tags
-Router.post("/admin/tags/tags-delate/:_id", tagsDelete);
+Router.delete("/admin/tags/tags-delate/:_id", tagsDelete);
 //show all tags
 Router.get("/admin/tags/all-tags", gettags);
 
@@ -90,7 +90,7 @@ Router.post("/admin/layout/create-layout", layout);
 //update a layout
 Router.patch("/admin/layout/layout-update/:_id", updatelayout);
 //delate a layout
-Router.post("/admin/layout/layout-delate/:_id", layoutDelete);
+Router.delete("/admin/layout/layout-delate/:_id", layoutDelete);
 //show all layout
 Router.get("/admin/layout/all-layout", getlayout);
 

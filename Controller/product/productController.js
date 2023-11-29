@@ -92,7 +92,7 @@ const createProduct = async (req, res) => {
         image:arrImages,
       }).save();
 
-      res.status(201).send(true);
+      res.status(201).send({success:true});
     } catch (error) {
       console.log("error while saving the product data ", error);
       res
@@ -108,7 +108,7 @@ const createProduct = async (req, res) => {
 const GetAllProduct = async (req, res) => {
   try {
     const productData = await productModel.find();
-    res.status(200).send(productData);
+    res.status(200).send({success:true,productData});
   } catch (error) {}
 };
 

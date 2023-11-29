@@ -13,7 +13,7 @@ const cart = async (req, res) => {
         item: items,
       });
       await newCart.save();
-      res.status(200).send({ message: "Cart data saved successfully." });
+      res.status(200).send({success:true, message: "Cart data saved successfully." });
     } else {
       console.log("cartsss");
       // const mergedCart = mergeCarts(previousCart.item, items);
@@ -31,10 +31,10 @@ const cart = async (req, res) => {
 
       res
         .status(200)
-        .send({ message: "Cart data merged and saved successfully." });
+        .send({ success:true,message: "Cart data merged and saved successfully." });
     }
   } catch (error) {
-    res.status(500).send({ error: "Internal server error" });
+    res.status(500).send({success:false, error: "Internal server error" });
   }
 };
 

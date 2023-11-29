@@ -11,21 +11,22 @@ const category = async (req, res) => {
           details,
           slug,
         }).save();
-        res.status(200).send({ massage: "categories Uploaded" });
+        res.status(200).send({ success:true,massage: "categories Uploaded" });
       } else {
-        res.status(404).send({ massage: "categories all ready exists" });
+        res.status(404).send({ success:false,massage: "categories all ready exists" });
       }
     } catch (error) {
-      res.status(500).send({ massage: "Internal server error" });
+      res.status(500).send({ success:false,massage: "Internal server error" });
     }
   } catch (error) {
-    res.status(501).send({ massage: "fatching value error" });
+    res.status(501).send({success:false, massage: "fatching value error" });
   }
 };
 
 const updateCategory = async (req, res) => {
   try {
-    const { _id, name, details, slug } = req.body;
+    let _id = req.params._id;
+    const {name, details, slug } = req.body;
     if (!id || !name || !details || !slug) {
       res.status(401).send({ massage: "fill proper data" });
     } else {
@@ -36,7 +37,7 @@ const updateCategory = async (req, res) => {
           { name, details, slug },
           { new: true }
         );
-        res.status(200).send({ massage: "update succesfully" });
+        res.status(200).send({ success:true,massage: "update succesfully" });
       } else {
         res.status(404).send({ success: false, massage: "category not found" });
       }
@@ -49,7 +50,7 @@ const updateCategory = async (req, res) => {
 const getCategory = async (req, res) => {
   try {
     const data = await categoriesModel.find();
-    res.status(200).send({ data });
+    res.status(200).send({success:true, data });
   } catch (error) {
     res.status(500).send({ success: false, massage: "internal server error" });
   }
@@ -57,7 +58,7 @@ const getCategory = async (req, res) => {
 
 const categoriesDelete = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let _id = req.params._id;
     const checkdata = await categoriesModel.findOne(_id);
 
     if (checkdata) {

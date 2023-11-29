@@ -29,7 +29,8 @@ const tags = async (req, res) => {
 
 const updatetags = async (req, res) => {
   try {
-    const { _id, name, slug, details } = req.body;
+    let _id = req.params._id;
+    const {name, slug, details } = req.body;
     if (!id || !name || !slug || !details) {
       res.status(401).send({ success: false, massage: "fill proper data" });
     } else {
@@ -61,7 +62,7 @@ const gettags = async (req, res) => {
 
 const tagsDelete = async (req, res) => {
   try {
-    const { _id } = req.body;
+    let _id = req.params._id;
     const checkdata = await tagsModel.findOne(_id);
     if (checkdata) {
       await tagsModel.findByIdAndRemove(_id);
