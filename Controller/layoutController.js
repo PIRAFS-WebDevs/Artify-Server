@@ -63,9 +63,9 @@ const getlayout = async (req, res) => {
 const layoutDelete = async (req, res) => {
   try {
     let _id = req.params._id;
-    const checkdata = await layoutModel.findOne(_id);
+    const checkdata = await layoutModel.findOne({_id:_id});
     if (checkdata) {
-      await layoutModel.findByIdAndRemove(_id);
+      await layoutModel.findByIdAndDelete({_id:_id});
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "layout not found" });

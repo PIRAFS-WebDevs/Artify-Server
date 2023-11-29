@@ -63,9 +63,9 @@ const gettags = async (req, res) => {
 const tagsDelete = async (req, res) => {
   try {
     let _id = req.params._id;
-    const checkdata = await tagsModel.findOne(_id);
+    const checkdata = await tagsModel.findOne({_id:_id});
     if (checkdata) {
-      await tagsModel.findByIdAndRemove(_id);
+      await tagsModel.findByIdAndDelete({_id:_id});
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "tags not found" });

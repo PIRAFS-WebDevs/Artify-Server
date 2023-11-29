@@ -59,10 +59,10 @@ const getCategory = async (req, res) => {
 const categoriesDelete = async (req, res) => {
   try {
     let _id = req.params._id;
-    const checkdata = await categoriesModel.findOne(_id);
+    const checkdata = await categoriesModel.findOne({_id:_id});
 
     if (checkdata) {
-      await categoriesModel.findByIdAndRemove(_id);
+      await categoriesModel.findByIdAndDelete({_id:_id});
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "category not found" });
