@@ -63,14 +63,14 @@ Router.post("/admin/product/create-product",productUpload.array('images'), creat
 //Get All Product Data Route/API:-
 Router.get("/admin/product/all-product/", findProducts);
 //Update product Data Route/API:-
-Router.get("/admin/product/product-update/:_id", productUpdate);
+Router.patch("/admin/product/product-update/:_id", productUpdate);
 //Delate product Data Route/API:-
 Router.delete("/admin/product/product-delate/:_id", ProductDelete);
 
 //Create a Category
 Router.post("/admin/category/create-category", category);
 //update a category
-Router.post("/admin/category/category-update/:_id", updateCategory);
+Router.patch("/admin/category/category-update/:_id", updateCategory);
 //delate a category
 Router.post("/admin/category/category-delate/:_id", categoriesDelete);
 //show all category
@@ -79,7 +79,7 @@ Router.get("/admin/category/all-category", getCategory);
 //Create a tags
 Router.post("/admin/tags/create-tags", tags);
 //update a tags
-Router.post("/admin/tags/tags-update/:_id", updatetags);
+Router.patch("/admin/tags/tags-update/:_id", updatetags);
 //delate a tags
 Router.post("/admin/tags/tags-delate/:_id", tagsDelete);
 //show all tags
@@ -88,7 +88,7 @@ Router.get("/admin/tags/all-tags", gettags);
 //Create a layout
 Router.post("/admin/layout/create-layout", layout);
 //update a layout
-Router.post("/admin/layout/layout-update/:_id", updatelayout);
+Router.patch("/admin/layout/layout-update/:_id", updatelayout);
 //delate a layout
 Router.post("/admin/layout/layout-delate/:_id", layoutDelete);
 //show all layout

@@ -16,7 +16,7 @@ const findProducts = async (req, res) => {
             ],
           })
           .sort({ name: 1 });
-        console.log(products);
+        // console.log(products);
         if (products.length != 0) {
           res.status(200).send({ success: true, products });
         } else {
@@ -43,7 +43,7 @@ const findProducts = async (req, res) => {
           // }
           ()
           .sort({ name: 1 });
-        console.log(products);
+        // console.log(products);
         if (products.length != 0) {
           res.status(200).send({ success: true, products });
         } else {
