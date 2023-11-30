@@ -11,18 +11,21 @@ const {
   updateCategory,
   categoriesDelete,
   getCategory,
+  getCategoryById,
 } = require("../../Controller/categoriesController");
 const {
   gettags,
   tagsDelete,
   updatetags,
   tags,
+  getTagById,
 } = require("../../Controller/tagsController");
 const {
   layout,
   updatelayout,
   layoutDelete,
   getlayout,
+  getLayoutById,
 } = require("../../Controller/layoutController");
 const {
   AllUser,
@@ -79,6 +82,8 @@ Router.patch("/admin/category/category-update/:_id", updateCategory);
 Router.delete("/admin/category/category-delate/:_id", categoriesDelete);
 //show all category
 Router.get("/admin/category/all-category", getCategory);
+// get category by id
+Router.get("/admin/layout/Single-category/:_id", getCategoryById);
 
 //Create a tags
 Router.post("/admin/tags/create-tags", tags);
@@ -88,6 +93,8 @@ Router.patch("/admin/tags/tags-update/:_id", updatetags);
 Router.delete("/admin/tags/tags-delate/:_id", tagsDelete);
 //show all tags
 Router.get("/admin/tags/all-tags", gettags);
+// single tag
+Router.get("/admin/layout/Single-tag/:_id", getTagById);
 
 //Create a layout
 Router.post("/admin/layout/create-layout", layout);
@@ -97,5 +104,7 @@ Router.patch("/admin/layout/layout-update/:_id", updatelayout);
 Router.delete("/admin/layout/layout-delate/:_id", layoutDelete);
 //show all layout
 Router.get("/admin/layout/all-layout", getlayout);
+// single layout by id
+Router.get("/admin/layout/Single-layout/:_id", getLayoutById);
 
 module.exports = Router;
