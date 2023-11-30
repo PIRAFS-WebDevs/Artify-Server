@@ -4,23 +4,21 @@ const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
 const fs = require("fs");
-const { dirname } = require('path');
-const { fileURLToPath } = require('url');
+const { dirname } = require("path");
+const { fileURLToPath } = require("url");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../../Photo/productPhoto')
+    cb(null, "../../Photo/productPhoto");
   },
   filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-    cb(null, file.fieldname + '-' + uniqueSuffix)
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(null, file.fieldname + "-" + uniqueSuffix);
   },
 });
 
-
-
 const createProduct = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   try {
     const {
       name,
@@ -35,7 +33,7 @@ const createProduct = async (req, res) => {
     } = req.body;
     const arrImages = [];
     // console.log("hello")
-    console.log(req.files)
+    console.log(req.files);
     if (req.files) {
       try {
         const resizeAndConvertPromises = req.files.map((file) => {
@@ -43,22 +41,30 @@ const createProduct = async (req, res) => {
             sharp(file.path)
               .resize({ width: 440, height: 440, fit: "inside" })
               .toFormat("webp", { quality: 100 })
-              .toFile(path.join(path.dirname(file.path), file.filename + ".webp"), (err) => {
-                if (err) {
-                  console.error("Error resizing and converting image:", err);
-                  reject(err); // Reject the promise in case of an error
-                } else {
-                  fs.unlink(file.path, (unlinkErr) => {
-                    if (unlinkErr) {
-                      console.error("Error deleting file:", unlinkErr);
-                    } else {
-                      console.log("File deleted successfully:", file.path);
-                    }
-                  });
-                  arrImages.push(process.env.IMAGE_SPACE_SERVER + "/productPhoto/" + file.filename + ".webp");
-                  resolve();
+              .toFile(
+                path.join(path.dirname(file.path), file.filename + ".webp"),
+                (err) => {
+                  if (err) {
+                    console.error("Error resizing and converting image:", err);
+                    reject(err); // Reject the promise in case of an error
+                  } else {
+                    fs.unlink(file.path, (unlinkErr) => {
+                      if (unlinkErr) {
+                        console.error("Error deleting file:", unlinkErr);
+                      } else {
+                        console.log("File deleted successfully:", file.path);
+                      }
+                    });
+                    arrImages.push(
+                      process.env.IMAGE_SPACE_SERVER +
+                        "/productPhoto/" +
+                        file.filename +
+                        ".webp"
+                    );
+                    resolve();
+                  }
                 }
-              });
+              );
           });
         });
 
@@ -78,7 +84,7 @@ const createProduct = async (req, res) => {
     //   images[1] = arrImages[2];
     // }
     try {
-      console.log(arrImages)
+      console.log(arrImages);
       const data = await new productModel({
         name,
         slug,
@@ -89,10 +95,10 @@ const createProduct = async (req, res) => {
         categories,
         layout,
         tags,
-        image:arrImages,
+        image: arrImages,
       }).save();
 
-      res.status(201).send({success:true});
+      res.status(201).send({ success: true });
     } catch (error) {
       console.log("error while saving the product data ", error);
       res
@@ -108,7 +114,7 @@ const createProduct = async (req, res) => {
 const GetAllProduct = async (req, res) => {
   try {
     const productData = await productModel.find();
-    res.status(200).send({success:true,productData});
+    res.status(200).send({ success: true, productData });
   } catch (error) {}
 };
 
@@ -143,41 +149,23 @@ const SingleProduct = async (req, res) => {
 };
 
 const productUpdate = async (req, res) => {
+  console.log({ productUpdate: req.params._id });
   try {
     let _id = req.params._id;
-    let {
-      name,
-      slug,
-      description,
-      price,
-      sale_price,
-      status,
-      categories,
-      layout,
-      tags,
-    } = req.body;
-    //console.log('updateValue',updateValue);
-    const checkdata = await productModel.findOne(_id);
+    const body = req.body;
+    console.log("body:", body);
+
+    const checkdata = await productModel.findById({ _id: _id });
+
     if (checkdata) {
       try {
         const updateValue = await productModel.findByIdAndUpdate(
           { _id: _id },
-          {
-            id,
-            name,
-            slug,
-            description,
-            price,
-            sale_price,
-            status,
-            categories,
-            layout,
-            tags,
-          },
+          body,
           { new: true }
         );
 
-        res.status(200).send({ succes: true, updateValue });
+        res.status(200).send({ success: true, updateValue });
       } catch (e) {
         res
           .status(404)
