@@ -1,9 +1,9 @@
 const productModel = require("../../Model/productModel");
 
-const findProducts = async (req, res) => {
+const SearchProducts = async (req, res) => {
   try {
     const text = req.query.text;
-    console.log(text);
+
     if (text) {
       try {
         const products = await productModel
@@ -16,7 +16,7 @@ const findProducts = async (req, res) => {
             ],
           })
           .sort({ name: 1 });
-        // console.log(products);
+
         if (products.length != 0) {
           res.status(200).send({ success: true, products });
         } else {
@@ -31,19 +31,8 @@ const findProducts = async (req, res) => {
       }
     } else {
       try {
-        const products = await productModel
-          .find
-          // {
-          //   $or: [
-          //     { name: { $regex: new RegExp(text, 'i') } },
-          //     { categories: { $in: [text] } },
-          //     { tags: { $in: [text] } },
-          //     { layout: { $regex: new RegExp(text, 'i') } },
-          //   ],
-          // }
-          ()
-          .sort({ name: 1 });
-        // console.log(products);
+        const products = await productModel.find().sort({ name: 1 });
+
         if (products.length != 0) {
           res.status(200).send({ success: true, products });
         } else {
@@ -63,5 +52,5 @@ const findProducts = async (req, res) => {
 };
 
 module.exports = {
-  findProducts,
+  SearchProducts,
 };

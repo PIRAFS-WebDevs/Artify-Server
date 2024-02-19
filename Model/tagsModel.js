@@ -1,16 +1,17 @@
 const mongoose = require("mongoose");
 
 const tagsSchema = new mongoose.Schema({
-    name:{
-        type:String,
-        require:true,
-    },
-    slug:{
-        type:String
-    },
-    details:{
-        type:String,
-    },
-})
+  name: {
+    type: String,
+    required: true,
+  },
+  slug: {
+    type: String,
+    required: true,
+  },
+  details: {
+    type: String,
+  },
+});
 
-module.exports = mongoose.model("tags",tagsSchema);
+module.exports = mongoose.model("tags", tagsSchema);

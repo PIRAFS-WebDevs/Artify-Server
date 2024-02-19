@@ -1,76 +1,79 @@
 const mongoose = require("mongoose");
 
-const productSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     slug: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    categories:{
-        type:[String],
+    categories: {
+      type: [String],
     },
-    tags:{
-        type:[String],
+    tags: {
+      type: [String],
     },
-    layout:{
-        type:String,
+    layout: {
+      type: String,
     },
     description: {
-        type: String,
+      type: String,
     },
     type_id: {
-        type: String,
+      type: String,
     },
     price: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     sale_price: {
-        type: String,
+      type: String,
     },
     max_price: {
-        type: String,
-    },  
+      type: String,
+    },
     in_stock: {
-        type: String,
+      type: String,
     },
     status: {
-        type: String,
-        enum:["Published","Draft"]
+      type: String,
+      enum: ["Published", "Draft"],
     },
     image: {
-        type: [String]
-    }, activity: {
-        ratings: [{
-            user_id: {
-                type: mongoose.ObjectId,
-                ref: "User",
-            },
-            number:{
-                type:Number,
-            }
-        }
-        ],
-        comment:[
-            {
-                user_id: {
-                    type: mongoose.ObjectId,
-                    ref: "User",
-                },
-                text:{
-                    type:String,
-                }  
-            }
-        ]
-
+      type: [String],
     },
-    preview_url:{
-        type:String,
-    }
-}
-    , { timestamps: true })
+    activity: {
+      ratings: [
+        {
+          user_id: {
+            type: mongoose.ObjectId,
+            ref: "User",
+          },
+          number: {
+            type: Number,
+          },
+        },
+      ],
+      comment: [
+        {
+          user_id: {
+            type: mongoose.ObjectId,
+            ref: "User",
+          },
+          text: {
+            type: String,
+          },
+        },
+      ],
+    },
+    preview_url: {
+      type: String,
+    },
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Product", productSchema);

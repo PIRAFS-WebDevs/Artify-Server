@@ -1,24 +1,7 @@
 const cartModel = require("../../Model/cartModel");
 const productModel = require("../../Model/productModel");
-const multer = require("multer");
-const sharp = require("sharp");
-const path = require("path");
-const fs = require("fs");
-const { dirname } = require("path");
-const { fileURLToPath } = require("url");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "../../Photo/productPhoto");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + "-" + uniqueSuffix);
-  },
-});
-
-const createProduct = async (req, res) => {
-  console.log(req.body);
+const CreateProduct = async (req, res) => {
   try {
     const {
       name,
@@ -30,61 +13,9 @@ const createProduct = async (req, res) => {
       categories,
       layout,
       tags,
+      images,
     } = req.body;
-    const arrImages = [];
-    // console.log("hello")
-    console.log(req.files);
-    if (req.files) {
-      try {
-        const resizeAndConvertPromises = req.files.map((file) => {
-          return new Promise((resolve, reject) => {
-            sharp(file.path)
-              .resize({ width: 440, height: 440, fit: "inside" })
-              .toFormat("webp", { quality: 100 })
-              .toFile(
-                path.join(path.dirname(file.path), file.filename + ".webp"),
-                (err) => {
-                  if (err) {
-                    console.error("Error resizing and converting image:", err);
-                    reject(err); // Reject the promise in case of an error
-                  } else {
-                    fs.unlink(file.path, (unlinkErr) => {
-                      if (unlinkErr) {
-                        console.error("Error deleting file:", unlinkErr);
-                      } else {
-                        console.log("File deleted successfully:", file.path);
-                      }
-                    });
-                    arrImages.push(
-                      process.env.IMAGE_SPACE_SERVER +
-                        "/productPhoto/" +
-                        file.filename +
-                        ".webp"
-                    );
-                    resolve();
-                  }
-                }
-              );
-          });
-        });
-
-        await Promise.all(resizeAndConvertPromises); // Wait for all images to be processed
-      } catch (error) {
-        console.error("Error processing images:", error);
-        return res.status(500).send("Error processing images");
-      }
-    }
-
-    // const images = [];
-    // const img = arrImages[0];
-    // if (arrImages[1]) {
-    //   images[0] = arrImages[1];
-    // }
-    // if (arrImages[2]) {
-    //   images[1] = arrImages[2];
-    // }
     try {
-      console.log(arrImages);
       const data = await new productModel({
         name,
         slug,
@@ -95,39 +26,35 @@ const createProduct = async (req, res) => {
         categories,
         layout,
         tags,
-        image: arrImages,
+        images,
       }).save();
 
-      res.status(201).send({ success: true });
+      res.status(201).send({ success: true, data });
     } catch (error) {
-      console.log("error while saving the product data ", error);
       res
         .status(500)
         .send({ success: false, massage: "internal server error" });
     }
   } catch (error) {
-    console.log("error in get the value ", error);
     res.status(500).send({ success: false, massage: "internal server error" });
   }
 };
 
 const GetAllProduct = async (req, res) => {
   try {
-    const productData = await productModel.find();
-    res.status(200).send({ success: true, productData });
-  } catch (error) {}
+    const data = await productModel.find();
+    res.status(200).send({ success: true, data });
+  } catch (error) {
+    res.status(200).send({ success: false, message: "error get all products" });
+  }
 };
 
 const SingleProduct = async (req, res) => {
   try {
     const _id = req.params._id;
-    console.log(
-      "🚀 ~ file: productController.js:54 ~ SingleProduct ~ _id:",
-      _id
-    );
     if (_id) {
       try {
-        const singleData = await productModel.findById({ _id: _id });
+        const singleData = await productModel.findById({ _id });
         if (singleData) {
           res.status(200).send({ success: true, singleData });
         } else {
@@ -143,24 +70,20 @@ const SingleProduct = async (req, res) => {
       }
     }
   } catch (error) {
-    console.log("error get the value", error);
     res.status(500).send({ success: false, massage: "internal server error" });
   }
 };
 
-const productUpdate = async (req, res) => {
-  console.log({ productUpdate: req.params._id });
+const UpdateProduct = async (req, res) => {
   try {
-    let _id = req.params._id;
+    const _id = req.params._id;
     const body = req.body;
-    console.log("body:", body);
+    const checkExist = await productModel.findById({ _id });
 
-    const checkdata = await productModel.findById({ _id: _id });
-
-    if (checkdata) {
+    if (checkExist) {
       try {
         const updateValue = await productModel.findByIdAndUpdate(
-          { _id: _id },
+          { _id },
           body,
           { new: true }
         );
@@ -176,15 +99,14 @@ const productUpdate = async (req, res) => {
         .status(404)
         .send({ success: false, massage: `Product with ID ${_id} not found` });
     }
-  } catch (e) {
+  } catch (error) {
     res.status(404).send({ success: false, massage: "internal server error" });
   }
 };
 
-const ProductShowForUser = async (req, res) => {
+const PublishedProduct = async (req, res) => {
   try {
     const data = await productModel.find({ status: "Published" });
-    // console.log(data.name);
     res.status(200).send({ success: true, data });
   } catch (error) {
     console.log(error);
@@ -220,13 +142,14 @@ const BuyProduct = async (req, res) => {
     res.status(404).send({ success: false, massage: "internal server error" });
   }
 };
+
 const ProductDelete = async (req, res) => {
   try {
     const _id = req.params._id;
-    const checkdata = await productModel.findOne({ _id: _id });
-    console.log(checkdata);
-    if (checkdata) {
-      await productModel.findByIdAndDelete({ _id: _id });
+    const checkExist = await productModel.findOne({ _id });
+
+    if (checkExist) {
+      await productModel.findByIdAndDelete({ _id });
       res.status(200).send({ success: true });
     } else {
       res.status(404).send({ success: false, massage: "product not found" });
@@ -236,19 +159,22 @@ const ProductDelete = async (req, res) => {
   }
 };
 
-const productRatings = async (req, res) => {
+const ProductRatings = async (req, res) => {
   try {
     const { prod_id, user_id, number, text1 } = req.body;
+
     const text = {
       user_id: user_id,
       text: text1,
     };
+
     try {
-      const checkData = productModel.findOne({
+      const checkExist = productModel.findOne({
         _id: prod_id,
         "activity.ratings.user_id": user_id,
       });
-      if (checkData) {
+
+      if (checkExist) {
         Product.findOneAndUpdate(
           { _id: prod_id, "activity.ratings.user_id": user_id },
           {
@@ -293,13 +219,14 @@ const productRatings = async (req, res) => {
     res.status(500).send({ success: false, massage: "internal server error" });
   }
 };
+
 module.exports = {
-  createProduct,
+  CreateProduct,
   GetAllProduct,
   SingleProduct,
-  productUpdate,
-  ProductShowForUser,
+  UpdateProduct,
+  PublishedProduct,
   BuyProduct,
   ProductDelete,
-  productRatings,
+  ProductRatings,
 };

@@ -3,10 +3,11 @@ const mongoose = require("mongoose");
 const layoutSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
   },
   slug: {
     type: String,
+    required: true,
   },
   details: {
     type: String,

@@ -4,23 +4,14 @@ const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: true,
+      required: true,
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
     },
     phoneNumber: {
-      type: String,
-    },
-    countryName: {
-      type: String,
-    },
-    address: {
-      type: String,
-    },
-    password: {
       type: String,
     },
     imgURL: {
@@ -29,7 +20,7 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       default: "user",
-      enum: ["user", "admin"]
+      enum: ["user", "admin"],
     },
   },
   { timestamps: true }
