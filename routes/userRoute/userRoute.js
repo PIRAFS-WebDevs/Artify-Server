@@ -1,31 +1,17 @@
 const express = require("express");
-const {
-  userSignup,
-  userLogin,
-  ChangePassword,
-} = require("../../Controller/auth Login/authController");
-const { userCheckToken } = require("../../middleware/jsonwebtoken");
 const { cart, getCart } = require("../../Controller/cartController");
 const {
   ProductShowForUser,
   SingleProduct,
   BuyProduct,
 } = require("../../Controller/product/productController");
-const { getCategory } = require("../../Controller/categoriesController");
 const { findProducts } = require("../../Controller/product/searchProduct");
 const Router = express.Router();
-
-//User Login Route/API
-Router.post("/signup", userSignup);
-// Router.post("/login",userLogin);
-
-//User Change Password Route/API:-
-Router.post("/user/change-pass", ChangePassword);
 
 //Cart Product Route/API:-
 Router.post("/user/cart", cart);
 //user get cart Route/API:-
-Router.get("/user/get-cart/:_id",getCart);
+Router.get("/user/get-cart/:_id", getCart);
 //User Proced to pay Route:-
 Router.get("/user/proced-to-pay", BuyProduct);
 
@@ -33,10 +19,6 @@ Router.get("/user/proced-to-pay", BuyProduct);
 Router.get("/product/:_id", SingleProduct);
 //All Product Route/API:-
 Router.get("/user/all-product", ProductShowForUser);
-
-//All category show Route:-
-Router.get("/all-category", getCategory);
-
 //search product
 Router.post("/search-product", findProducts);
 

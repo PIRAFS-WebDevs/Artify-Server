@@ -5,9 +5,9 @@ const cors = require("cors");
 const connectDatabase = require("./config/database");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-
-const userRoute = require("./route/userRoute/userRoute");
-const adminRoute = require("./route/adminRoute/adminRoute");
+const userRoute = require("./routes/userRoute/userRoute");
+const adminRoute = require("./routes/adminRoute/adminRoute");
+const routes = require("./routes/index");
 
 dotenv.config({ path: "./config.env" });
 const port = process.env.PORT || 8080;
@@ -15,7 +15,7 @@ const port = process.env.PORT || 8080;
 connectDatabase();
 
 const corsOptions = {
-  origin: ["http://localhost:3000", "https://waresun-client-nine.vercel.app"],
+  origin: ["http://localhost:3000"],
   credentials: true,
 };
 
@@ -33,11 +33,12 @@ app.use(cors(corsOptions));
 app.use(express.json());
 app.use("/api/v1/auth", userRoute);
 app.use("/api/v1/auth", adminRoute);
+app.use("/api/v1/auth", routes);
 app.use(morgan("dev"));
 app.use(cookieParser());
 
 app.get("/", (req, res) => {
-  res.send("gogoshop server is running");
+  res.send("Artify server is running");
 });
 app.listen(port, () => {
   console.log(`http://localhost:${port}`);

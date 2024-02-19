@@ -6,13 +6,7 @@ const {
   productUpdate,
   ProductDelete,
 } = require("../../Controller/product/productController");
-const {
-  category,
-  updateCategory,
-  categoriesDelete,
-  getCategory,
-  getCategoryById,
-} = require("../../Controller/categoriesController");
+
 const {
   gettags,
   tagsDelete,
@@ -73,38 +67,5 @@ Router.get("/admin/product/all-product/", findProducts);
 Router.patch("/admin/product/product-update/:_id", productUpdate);
 //Delate product Data Route/API:-
 Router.delete("/admin/product/product-delate/:_id", ProductDelete);
-
-//Create a Category
-Router.post("/admin/category/create-category", category);
-//update a category
-Router.patch("/admin/category/category-update/:_id", updateCategory);
-//delate a category
-Router.delete("/admin/category/category-delate/:_id", categoriesDelete);
-//show all category
-Router.get("/admin/category/all-category", getCategory);
-// get category by id
-Router.get("/admin/layout/Single-category/:_id", getCategoryById);
-
-//Create a tags
-Router.post("/admin/tags/create-tags", tags);
-//update a tags
-Router.patch("/admin/tags/tags-update/:_id", updatetags);
-//delate a tags
-Router.delete("/admin/tags/tags-delate/:_id", tagsDelete);
-//show all tags
-Router.get("/admin/tags/all-tags", gettags);
-// single tag
-Router.get("/admin/layout/Single-tag/:_id", getTagById);
-
-//Create a layout
-Router.post("/admin/layout/create-layout", layout);
-//update a layout
-Router.patch("/admin/layout/layout-update/:_id", updatelayout);
-//delate a layout
-Router.delete("/admin/layout/layout-delate/:_id", layoutDelete);
-//show all layout
-Router.get("/admin/layout/all-layout", getlayout);
-// single layout by id
-Router.get("/admin/layout/Single-layout/:_id", getLayoutById);
 
 module.exports = Router;

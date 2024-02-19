@@ -3,15 +3,16 @@ const mongoose = require("mongoose");
 const categoriesSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: true,
+    required: true,
     unique: true,
   },
   details: {
     type: String,
-    require: true,
+    required: true,
   },
   slug: {
     type: String,
+    required: true,
   },
 });
 

@@ -3,19 +3,18 @@ const tagsModel = require("../Model/tagsModel");
 const tags = async (req, res) => {
   try {
     const { name, slug, details } = req.body;
+
     try {
-      const checkdata = await tagsModel.findOne({ name: name });
-      if (!checkdata) {
+      const checkExist = await tagsModel.findOne({ name: name });
+      if (!checkExist) {
         await tagsModel({
           name,
           slug,
           details,
         }).save();
-        res.status(200).send({ success: true, massage: "tags Uploaded" });
+        res.status(200).send({ success: true, massage: "tag Uploaded" });
       } else {
-        res
-          .status(404)
-          .send({ success: false, massage: "tags all ready exists" });
+        res.status(404).send({ success: false, massage: "tag already exists" });
       }
     } catch (error) {
       res
@@ -23,27 +22,28 @@ const tags = async (req, res) => {
         .send({ success: false, massage: "Internal server error" });
     }
   } catch (error) {
-    res.status(501).send({ success: false, massage: "fatching value error" });
+    res.status(501).send({ success: false, massage: "fetching value error" });
   }
 };
 
-const updatetags = async (req, res) => {
+const updateTag = async (req, res) => {
   try {
-    let _id = req.params._id;
+    const _id = req.params._id;
     const { name, slug, details } = req.body;
+
     if (!_id || !name || !slug || !details) {
       res.status(401).send({ success: false, massage: "fill proper data" });
     } else {
-      const checkdata = await tagsModel.findById({ _id: _id });
-      if (checkdata) {
+      const checkExist = await tagsModel.findById({ _id });
+      if (checkExist) {
         await tagsModel.findByIdAndUpdate(
           _id,
           { name, slug, details },
           { new: true }
         );
-        res.status(200).send({ success: true, massage: "update succesfully" });
+        res.status(200).send({ success: true, massage: "update successfully" });
       } else {
-        res.status(404).send({ success: false, massage: "tags not found" });
+        res.status(404).send({ success: false, massage: "tag not found" });
       }
     }
   } catch (error) {
@@ -51,7 +51,7 @@ const updatetags = async (req, res) => {
   }
 };
 
-const gettags = async (req, res) => {
+const getTags = async (req, res) => {
   try {
     const data = await tagsModel.find();
     res.status(200).send({ success: true, data });
@@ -59,25 +59,28 @@ const gettags = async (req, res) => {
     res.status(500).send({ success: false, massage: "internal server error" });
   }
 };
+
 const getTagById = async (req, res) => {
   const _id = req.params._id;
+
   try {
-    const data = await tagsModel.findById({ _id: _id });
+    const data = await tagsModel.findById({ _id });
     res.status(200).send({ success: true, data });
   } catch (error) {
     res.status(500).send({ success: false, massage: "internal server error" });
   }
 };
 
-const tagsDelete = async (req, res) => {
+const deleteTag = async (req, res) => {
   try {
-    let _id = req.params._id;
-    const checkdata = await tagsModel.findOne({ _id: _id });
-    if (checkdata) {
-      await tagsModel.findByIdAndDelete({ _id: _id });
+    const _id = req.params._id;
+    const checkExist = await tagsModel.findOne({ _id });
+
+    if (checkExist) {
+      await tagsModel.findByIdAndDelete({ _id });
       res.status(200).send({ success: true });
     } else {
-      res.status(404).send({ success: false, massage: "tags not found" });
+      res.status(404).send({ success: false, massage: "tag not found" });
     }
   } catch (error) {
     res.status(500).send({ success: false, massage: "internal server error" });
@@ -86,8 +89,8 @@ const tagsDelete = async (req, res) => {
 
 module.exports = {
   tags,
-  updatetags,
-  gettags,
+  updateTag,
+  getTags,
   getTagById,
-  tagsDelete,
+  deleteTag,
 };
