@@ -6,7 +6,7 @@ const SearchProducts = async (req, res) => {
 
     if (text) {
       try {
-        const products = await productModel
+        const data = await productModel
           .find({
             $or: [
               { name: { $regex: new RegExp(text, "i") } },
@@ -17,8 +17,8 @@ const SearchProducts = async (req, res) => {
           })
           .sort({ name: 1 });
 
-        if (products.length != 0) {
-          res.status(200).send({ success: true, products });
+        if (data.length != 0) {
+          res.status(200).send({ success: true, data });
         } else {
           res
             .status(400)
@@ -31,10 +31,10 @@ const SearchProducts = async (req, res) => {
       }
     } else {
       try {
-        const products = await productModel.find().sort({ name: 1 });
+        const data = await productModel.find().sort({ name: 1 });
 
-        if (products.length != 0) {
-          res.status(200).send({ success: true, products });
+        if (data.length != 0) {
+          res.status(200).send({ success: true, data });
         } else {
           res
             .status(400)

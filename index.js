@@ -29,9 +29,9 @@ app.use((req, res, next) => {
 
 app.use(cors(corsOptions));
 app.use(express.json());
-app.use("/api/v1/auth", routes);
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use("/api/v1/auth", routes);
 
 app.get("/", (req, res) => {
   res.send("Artify server is running");

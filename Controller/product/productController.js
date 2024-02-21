@@ -54,9 +54,9 @@ const SingleProduct = async (req, res) => {
     const _id = req.params._id;
     if (_id) {
       try {
-        const singleData = await productModel.findById({ _id });
-        if (singleData) {
-          res.status(200).send({ success: true, singleData });
+        const data = await productModel.findById({ _id });
+        if (data) {
+          res.status(200).send({ success: true, data });
         } else {
           res
             .status(401)
@@ -82,13 +82,11 @@ const UpdateProduct = async (req, res) => {
 
     if (checkExist) {
       try {
-        const updateValue = await productModel.findByIdAndUpdate(
-          { _id },
-          body,
-          { new: true }
-        );
+        const data = await productModel.findByIdAndUpdate({ _id }, body, {
+          new: true,
+        });
 
-        res.status(200).send({ success: true, updateValue });
+        res.status(200).send({ success: true, data });
       } catch (e) {
         res
           .status(404)
@@ -150,7 +148,9 @@ const ProductDelete = async (req, res) => {
 
     if (checkExist) {
       await productModel.findByIdAndDelete({ _id });
-      res.status(200).send({ success: true });
+      res
+        .status(200)
+        .send({ success: true, message: "product deleted successfully" });
     } else {
       res.status(404).send({ success: false, massage: "product not found" });
     }

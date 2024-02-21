@@ -16,7 +16,7 @@ router.post("/", CreateProduct);
 // get a product
 router.get("/:_id", SingleProduct);
 // delete a product
-router.get("/:_id", ProductDelete);
+router.delete("/:_id", ProductDelete);
 // update a product
 router.patch("/:_id", UpdateProduct);
 // get all products
