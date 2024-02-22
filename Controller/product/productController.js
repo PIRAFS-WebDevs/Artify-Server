@@ -14,6 +14,7 @@ const CreateProduct = async (req, res) => {
       layout,
       tags,
       images,
+      preview_url,
     } = req.body;
     try {
       const data = await new productModel({
@@ -27,6 +28,7 @@ const CreateProduct = async (req, res) => {
         layout,
         tags,
         images,
+        preview_url,
       }).save();
 
       res.status(201).send({ success: true, data });

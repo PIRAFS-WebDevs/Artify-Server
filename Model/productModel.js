@@ -22,9 +22,6 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    type_id: {
-      type: String,
-    },
     price: {
       type: String,
       required: true,
@@ -32,17 +29,11 @@ const productSchema = new mongoose.Schema(
     sale_price: {
       type: String,
     },
-    max_price: {
-      type: String,
-    },
-    in_stock: {
-      type: String,
-    },
     status: {
       type: String,
       enum: ["Published", "Draft"],
     },
-    image: {
+    images: {
       type: [String],
     },
     activity: {
