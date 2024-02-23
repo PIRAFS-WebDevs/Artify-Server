@@ -11,7 +11,7 @@ const {
 // all user
 router.get("/", AllUser);
 // create user
-router.get("/", User);
+router.post("/", User);
 // update user
 router.patch("/", UpdateUserData);
 // single user
