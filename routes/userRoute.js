@@ -13,7 +13,7 @@ router.get("/", AllUser);
 // create user
 router.get("/", User);
 // update user
-router.get("/", UpdateUserData);
+router.patch("/", UpdateUserData);
 // single user
 router.get("/:email", SingleUser);
 // delete user

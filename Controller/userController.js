@@ -35,14 +35,14 @@ const User = async (req, res) => {
 
 const UpdateUserData = async (req, res) => {
   try {
-    const { email, phoneNumber, image } = req.body;
+    const { name, phoneNumber, image, email } = req.body;
 
     try {
       const checkExist = await userModel.findOne({ email: email });
       if (checkExist) {
         const data = await userModel.findByIdAndUpdate(
           checkExist._id,
-          { email, phoneNumber, image },
+          { name, phoneNumber, image },
           { new: true }
         );
         res.status(200).send({ success: true, data });
@@ -94,8 +94,8 @@ const UserDelete = async (req, res) => {
     const checkExist = await userModel.findOne({ _id });
 
     if (checkExist) {
-      await userModel.findByIdAndDelete({ _id: checkExist._id });
-      res.status(200).send({ success: true });
+      const data = await userModel.findByIdAndDelete({ _id: checkExist._id });
+      res.status(200).send({ success: true, data });
     } else {
       res.status(404).send({ success: false, massage: "user not found" });
     }
@@ -112,12 +112,12 @@ const UserRoleChange = async (req, res) => {
       const checkExist = await userModel.findOne({ _id });
       if (checkExist) {
         try {
-          const resData = await userModel.findByIdAndUpdate(
+          const data = await userModel.findByIdAndUpdate(
             { _id: checkExist._id },
             { role: role },
             { new: true }
           );
-          res.status(200).send({ success: true, resData });
+          res.status(200).send({ success: true, data });
         } catch (error) {
           res
             .status(500)
