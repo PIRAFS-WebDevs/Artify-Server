@@ -14,7 +14,10 @@ const userSchema = new mongoose.Schema(
     phoneNumber: {
       type: String,
     },
-    imgURL: {
+    bio: {
+      type: String,
+    },
+    imgUrl: {
       type: String,
     },
     role: {

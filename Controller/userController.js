@@ -2,7 +2,7 @@ const userModel = require("../Model/userModel");
 const { createToken } = require("../middleware/jsonwebtoken");
 
 const User = async (req, res) => {
-  const { name, email, photoURL } = req.body;
+  const { name, email, imgUrl } = req.body;
 
   if (!name || !email) {
     res.status(401).send({ success: false });
@@ -11,9 +11,9 @@ const User = async (req, res) => {
     if (!checkEmail) {
       try {
         checkEmail = await new userModel({
-          name: name,
-          email: email,
-          imgURL: photoURL,
+          name,
+          email,
+          imgUrl,
         }).save();
 
         // const token = await createToken(email);
@@ -35,14 +35,14 @@ const User = async (req, res) => {
 
 const UpdateUserData = async (req, res) => {
   try {
-    const { name, phoneNumber, image, email } = req.body;
+    const { name, phoneNumber, imgUrl, bio, email } = req.body;
 
     try {
       const checkExist = await userModel.findOne({ email: email });
       if (checkExist) {
         const data = await userModel.findByIdAndUpdate(
           checkExist._id,
-          { name, phoneNumber, image },
+          { name, phoneNumber, imgUrl, bio },
           { new: true }
         );
         res.status(200).send({ success: true, data });
