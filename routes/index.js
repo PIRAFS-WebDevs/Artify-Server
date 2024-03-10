@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { CartRoute } = require("./cartRoute");
 const { CategoryRoute } = require("./categoryRoute");
 const { LayoutRoute } = require("./layoutRoute");
+const { PaymentRoute } = require("./paymentRoute");
 const { ProductRoute } = require("./productRoute");
 const { TagRoute } = require("./tagRoute");
 const { UserRoute } = require("./userRoute");
@@ -12,5 +13,6 @@ router.use("/tags", TagRoute);
 router.use("/users", UserRoute);
 router.use("/products", ProductRoute);
 router.use("/cart", CartRoute);
+router.use("/payment", PaymentRoute);
 
 module.exports = router;
