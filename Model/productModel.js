@@ -48,7 +48,7 @@ const productSchema = new mongoose.Schema(
           },
         },
       ],
-      comment: [
+      comments: [
         {
           user_id: {
             type: mongoose.ObjectId,
