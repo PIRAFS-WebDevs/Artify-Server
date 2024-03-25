@@ -2,25 +2,17 @@ const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema(
   {
+    email: {
+      type: String,
+      required: true,
+    },
     products: {
       type: [mongoose.ObjectId],
       ref: "Product",
       required: true,
     },
     total: {
-      type: String,
-      required: true,
-    },
-    subtotal: {
-      type: String,
-      required: true,
-    },
-    tax: {
-      type: String,
-      required: true,
-    },
-    total_item: {
-      type: String,
+      type: Number,
       required: true,
     },
     method: {

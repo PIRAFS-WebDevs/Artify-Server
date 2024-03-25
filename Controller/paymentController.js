@@ -9,13 +9,17 @@ const createPayment = async (req, res) => {
   try {
     const { email, items } = req.body;
 
+    const total = items.reduce((accumulator, currentItem) => {
+      return accumulator + parseFloat(currentItem.sale_price);
+    }, 0);
+
     const transformedItems = items.map((item) => ({
       price_data: {
         currency: "usd",
-        unit_amount: Number(item.sale_price) * 100,
+        unit_amount: Math.round(total * 100),
         product_data: {
           name: item.name,
-          images: [item.images[0]],
+          images: [item.images[0]] || "",
           description: item.description,
         },
       },
@@ -34,6 +38,16 @@ const createPayment = async (req, res) => {
       line_items: transformedItems,
     });
 
+    if (session) {
+      const data = {
+        email,
+        products: items.map((item) => item._id),
+        total: total.toFixed(2),
+      };
+
+      await new paymentModel(data).save();
+    }
+
     res.status(200).send({ success: true, url: session.url });
   } catch (error) {
     res.status(501).send({ success: false, massage: "Create payment failed" });
@@ -41,14 +55,45 @@ const createPayment = async (req, res) => {
 };
 
 // save payment info
-const savePayment = async (req, res) => {
-  try {
-    const { total, subtotal, tax, totalItem } = req.body;
+const savePayment = async (data) => {
+  const existPayment = await paymentModel.findOne({ email: data.email });
 
-    const data = await new paymentModel({});
-  } catch (error) {
-    res.status(500).send({ success: false, massage: "Internal server error" });
+  if (existPayment) {
+    await paymentModel.findOneAndUpdate(existPayment._id, data, { new: true });
+  } else {
+    await new paymentModel(data).save();
   }
 };
 
-module.exports = { createPayment };
+// get all payment info
+const getAllPayment = async (req, res) => {
+  try {
+    const data = await paymentModel.find();
+    res.status(200).send({ success: true, data });
+  } catch (error) {
+    res.status(500).send({ success: false, massage: "internal server error" });
+  }
+};
+
+// get payment info by email
+const getPaymentByEmail = async (req, res) => {
+  try {
+    const email = req.params.email;
+    try {
+      const data = await paymentModel.find({ email });
+      if (data) {
+        res.status(200).send({ success: true, data });
+      } else {
+        res.status(404).send({ success: false, massage: "user not found" });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .send({ success: false, massage: "internal server error" });
+    }
+  } catch (error) {
+    res.status(500).send({ success: false, massage: "internal server error" });
+  }
+};
+
+module.exports = { createPayment, getAllPayment, getPaymentByEmail };
