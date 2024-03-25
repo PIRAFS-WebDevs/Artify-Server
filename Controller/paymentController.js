@@ -10,7 +10,7 @@ const createPayment = async (req, res) => {
     const { email, items } = req.body;
 
     const total = items.reduce((accumulator, currentItem) => {
-      return accumulator + parseFloat(currentItem.sale_price).toFixed(2);
+      return accumulator + parseFloat(currentItem.sale_price);
     }, 0);
 
     const transformedItems = items.map((item) => ({
@@ -39,16 +39,29 @@ const createPayment = async (req, res) => {
     });
 
     if (session) {
-      await new paymentModel({
+      const data = {
         email,
         products: items.map((item) => item._id),
-        total,
-      }).save();
+        total: total.toFixed(2),
+      };
+
+      await new paymentModel(data).save();
     }
 
     res.status(200).send({ success: true, url: session.url });
   } catch (error) {
     res.status(501).send({ success: false, massage: "Create payment failed" });
+  }
+};
+
+// save payment info
+const savePayment = async (data) => {
+  const existPayment = await paymentModel.findOne({ email: data.email });
+
+  if (existPayment) {
+    await paymentModel.findOneAndUpdate(existPayment._id, data, { new: true });
+  } else {
+    await new paymentModel(data).save();
   }
 };
 
