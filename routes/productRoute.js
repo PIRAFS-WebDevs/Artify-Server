@@ -22,7 +22,7 @@ router.patch("/:_id", UpdateProduct);
 // get all products
 router.get("/", GetAllProduct);
 // search products
-router.get("/", SearchProducts);
+router.get("/search/:text", SearchProducts);
 // get published products
 router.get("/published", PublishedProduct);
 // buy a product

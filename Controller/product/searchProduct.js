@@ -2,7 +2,7 @@ const productModel = require("../../Model/productModel");
 
 const SearchProducts = async (req, res) => {
   try {
-    const text = req.query.text;
+    const { text } = req.params;
 
     if (text) {
       try {
