@@ -163,62 +163,58 @@ const ProductDelete = async (req, res) => {
 
 const ProductRatings = async (req, res) => {
   try {
-    const { prod_id, user_id, number, text1 } = req.body;
+    const { user_id, number, comment } = req.body;
+    const id = req.params.id;
 
-    const text = {
-      user_id: user_id,
-      text: text1,
-    };
+    // Check if the product exists
+    const existingProduct = await productModel.findById(id);
 
-    try {
-      const checkExist = productModel.findOne({
-        _id: prod_id,
-        "activity.ratings.user_id": user_id,
-      });
+    if (!existingProduct) {
+      return res.status(400).json({ message: "Error to find product" });
+    }
 
-      if (checkExist) {
-        Product.findOneAndUpdate(
-          { _id: prod_id, "activity.ratings.user_id": user_id },
-          {
-            $set: { "activity.ratings.$.number": number },
-            $push: { "activity.comment": text },
-          },
-          { new: true },
-          (updateErr, updatedProduct) => {
-            if (updateErr) {
-              console.error("Error updating product:", updateErr);
-            } else {
-              console.log("Updated product:", updatedProduct);
-            }
-          }
-        );
-      } else {
-        Product.findByIdAndUpdate(
-          prod_id,
-          {
-            $push: {
-              "activity.ratings.user_id": user_id,
-              "activity.ratings.$.number": number,
-              "activity.comment": text,
+    // Find and update the rating if it exists, or add a new rating if it doesn't
+    const result = await productModel.findOneAndUpdate(
+      { _id: id, "ratings.user_id": user_id },
+      {
+        $set: {
+          "ratings.$.number": number,
+          "ratings.$.comment": comment,
+        },
+      },
+      {
+        new: true,
+        upsert: false, // Only update existing
+      }
+    );
+
+    if (!result) {
+      // If no existing rating was updated, add a new rating
+      await productModel.findByIdAndUpdate(
+        id,
+        {
+          $push: {
+            ratings: {
+              user_id,
+              number,
+              comment,
             },
           },
-          { new: true },
-          (updateErr, updatedProduct) => {
-            if (updateErr) {
-              console.error("Error updating product:", updateErr);
-            } else {
-              console.log("Updated product:", updatedProduct);
-            }
-          }
-        );
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .send({ success: false, massage: "internal server error" });
+        },
+        {
+          new: true,
+          upsert: true, // Create new entry if doesn't exist
+        }
+      );
+
+      return res
+        .status(200)
+        .json({ success: true, message: "Rating is added" });
     }
+
+    res.status(200).json({ success: true, message: "Rating is updated" });
   } catch (error) {
-    res.status(500).send({ success: false, massage: "internal server error" });
+    res.status(400).json({ message: "Error to update rating", error });
   }
 };
 

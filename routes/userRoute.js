@@ -6,6 +6,7 @@ const {
   UserRoleChange,
   User,
   UpdateUserData,
+  UserById,
 } = require("../Controller/userController");
 
 // all user
@@ -16,6 +17,8 @@ router.post("/", User);
 router.patch("/", UpdateUserData);
 // single user
 router.get("/:email", SingleUser);
+// user by id
+router.get("/id/:id", UserById);
 // delete user
 router.delete("/:_id", UserDelete);
 // change role
