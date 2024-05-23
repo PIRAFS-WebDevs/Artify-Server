@@ -28,6 +28,6 @@ router.get("/published", PublishedProduct);
 // buy a product
 router.post("/buy-product", BuyProduct);
 // product ratings
-router.patch("/product-ratings", ProductRatings);
+router.patch("/update-rating/:id", ProductRatings);
 
 module.exports.ProductRoute = router;

@@ -36,30 +36,24 @@ const productSchema = new mongoose.Schema(
     images: {
       type: [String],
     },
-    activity: {
-      ratings: [
-        {
-          user_id: {
-            type: mongoose.ObjectId,
-            ref: "User",
-          },
-          number: {
-            type: Number,
-          },
+    ratings: [
+      {
+        user_id: {
+          type: mongoose.ObjectId,
+          ref: "User",
         },
-      ],
-      comments: [
-        {
-          user_id: {
-            type: mongoose.ObjectId,
-            ref: "User",
-          },
-          text: {
-            type: String,
-          },
+        number: {
+          type: Number,
         },
-      ],
-    },
+        comment: {
+          type: String,
+        },
+        date: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
     preview_url: {
       type: String,
     },

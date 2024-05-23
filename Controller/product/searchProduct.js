@@ -20,9 +20,7 @@ const SearchProducts = async (req, res) => {
         if (data.length != 0) {
           res.status(200).send({ success: true, data });
         } else {
-          res
-            .status(400)
-            .send({ success: false, massage: "product not found" });
+          res.status(200).send({ success: true, data: [] });
         }
       } catch (error) {
         res
