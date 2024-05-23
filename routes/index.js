@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { BlogRoute } = require("./blogRoute");
 const { CartRoute } = require("./cartRoute");
 const { CategoryRoute } = require("./categoryRoute");
 const { LayoutRoute } = require("./layoutRoute");
@@ -14,5 +15,6 @@ router.use("/users", UserRoute);
 router.use("/products", ProductRoute);
 router.use("/cart", CartRoute);
 router.use("/payment", PaymentRoute);
+router.use("/blogs", BlogRoute);
 
 module.exports = router;

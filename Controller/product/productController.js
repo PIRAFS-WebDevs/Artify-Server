@@ -198,6 +198,7 @@ const ProductRatings = async (req, res) => {
               user_id,
               number,
               comment,
+              date: Date.now(),
             },
           },
         },
